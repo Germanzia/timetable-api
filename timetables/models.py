@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -61,6 +62,7 @@ class Position(models.Model):
 
 class Staff(models.Model):
     staff_id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
     staff_name_fa = models.TextField(blank=True, null=True)
     staff_family_fa = models.TextField(blank=True, null=True)
     staff_name_eng = models.TextField(blank=True, null=True)
