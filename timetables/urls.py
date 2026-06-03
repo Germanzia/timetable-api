@@ -13,5 +13,7 @@ router.register(r'staff', views.StaffViewSet)
 router.register(r'performance', views.PerformanceViewSet)
 
 urlpatterns = [
+    path('', views.api_root, name='api-root'),
+    path('performance-table/', views.performance_table, name='performance_table'),
     path('', include(router.urls)),
 ]

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Performance Records</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .filters {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .filter-group select, .filter-group button {
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .filter-group select {
+            background: white;
+            min-width: 150px;
+        }
+
+        .filter-group button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        .filter-group button:hover {
+            background: #45a049;
+        }
+
+        .btn-reset {
+            background: #6c757d !important;
+        }
+
+        .btn-reset:hover {
+            background: #5a6268 !important;
+        }
+
+        .stats {
+            padding: 15px 20px;
+            background: #e3f2fd;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .pagination {
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 4px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .pagination a {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background: #45a049;
+        }
+
+        .pagination .current {
+            background: #6c757d;
+            color: white;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .badge-overtime {
+            background: #ffc107;
+            color: #856404;
+        }
+
+        .badge-leave {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .footer {
+            padding: 15px;
+            text-align: center;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 12px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+            }
+            .filter-group {
+                width: 100%;
+            }
+            .filter-group select, .filter-group button {
+                width: 100%;
+            }
+            th, td {
+                font-size: 11px;
+                padding: 6px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Performance Records</h1>
+            <p>Employee Timetable Management System</p>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>👤 Staff Member</label>
+                <select id="staffFilter">
+                    <option value="">All Staff</option>
+                    {% for staff in staff_list %}
+                    <option value="{{ staff.staff_id }}" {% if selected_staff == staff.staff_id|stringformat:"s" %}selected{% endif %}>
+                        {{ staff.staff_name_eng }} {{ staff.staff_family_eng }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>📅 Year</label>
+                <select id="yearFilter">
+                    <option value="">All Years</option>
+                    {% for year in year_list %}
+                    <option value="{{ year.year_id }}" {% if selected_year == year.year_id|stringformat:"s" %}selected{% endif %}>
+                        {{ year.year_number }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>📆 Month</label>
+                <select id="monthFilter">
+                    <option value="">All Months</option>
+                    {% for month in month_list %}
+                    <option value="{{ month.month_id }}" {% if selected_month == month.month_id|stringformat:"s" %}selected{% endif %}>
+                        {{ month.month_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button onclick="applyFilters()">🔍 Apply Filters</button>
+            </div>
+
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button onclick="resetFilters()" class="btn-reset">🔄 Reset</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <span>📈 Total Records: <strong>{{ performances.paginator.count }}</strong></span>
+            <span>📄 Showing: <strong>{{ performances.start_index }} - {{ performances.end_index }}</strong> of {{ performances.paginator.count }}</span>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Staff Name</th>
+                        <th>Unit</th>
+                        <th>Position</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Working Days</th>
+                        <th>Overtime</th>
+                        <th>Leave</th>
+                        <th>Absence</th>
+                        <th>Daily Absence</th>
+                        <th>Annual Leave</th>
+                        <th>Sick Leave</th>
+                        <th>Proposed OT</th>
+                        <th>Approved OT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for perf in performances %}
+                    <tr>
+                        <td>{{ perf.performance_id }}</td>
+                        <td><strong>{{ perf.staff.staff_name_eng }} {{ perf.staff.staff_family_eng }}</strong></td>
+                        <td>{{ perf.staff.unit.unit_name_eng|default:"-" }}</td>
+                        <td>{{ perf.staff.position.position_name_eng|default:"-" }}</td>
+                        <td>{{ perf.year.year_number|default:"-" }}</td>
+                        <td>{{ perf.month.month_name|default:"-" }}</td>
+                        <td>{{ perf.performance_working_days|default:"-" }}</td>
+                        <td>{% if perf.performance_hourly_overtime %}<span class="badge badge-overtime">{{ perf.performance_hourly_overtime }}</span>{% else %}-{% endif %}</td>
+                        <td>{% if perf.performance_hourly_leave %}<span class="badge badge-leave">{{ perf.performance_hourly_leave }}</span>{% else %}-{% endif %}</td>
+                        <td>{{ perf.performance_hourly_absence|default:"-" }}</td>
+                        <td>{{ perf.performance_daily_absence|default:"-" }}</td>
+                        <td>{{ perf.performance_annual_leave|default:"-" }}</td>
+                        <td>{{ perf.performance_sick_leave|default:"-" }}</td>
+                        <td>{{ perf.performance_proposed_overtime|default:"-" }}</td>
+                        <td>{{ perf.performance_approved_overtime|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="15" style="text-align: center; padding: 50px;">
+                            😊 No performance records found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if performances.has_previous %}
+                    <a href="?page=1{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">« First</a>
+                    <a href="?page={{ performances.previous_page_number }}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">Previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ performances.number }} of {{ performances.paginator.num_pages }}
+                </span>
+
+                {% if performances.has_next %}
+                    <a href="?page={{ performances.next_page_number }}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">Next</a>
+                    <a href="?page={{ performances.paginator.num_pages }}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">Last »</a>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Employee Timetable System | Total Records: {{ performances.paginator.count }}</p>
+        </div>
+    </div>
+
+    <script>
+        function applyFilters() {
+            const staff = document.getElementById('staffFilter').value;
+            const year = document.getElementById('yearFilter').value;
+            const month = document.getElementById('monthFilter').value;
+
+            let url = window.location.pathname + '?';
+            if (staff) url += `staff=${staff}&`;
+            if (year) url += `year=${year}&`;
+            if (month) url += `month=${month}&`;
+            url += 'page=1';
+
+            window.location.href = url;
+        }
+
+        function resetFilters() {
+            window.location.href = window.location.pathname;
+        }
+    </script>
+</body>
+</html>
