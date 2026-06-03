@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول عملکرد پرسنل | سیستم مدیریت زمانبندی</title>
+
+    {% load static %}
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+                /* Editable cell styling for Head of Units */
+        .editable-cell {
+            background-color: #FFF8E7;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .editable-cell:hover {
+            background-color: #FFF0D4;
+            box-shadow: inset 0 0 0 2px #7895B2;
+        }
+
+        .editable-cell::after {
+            content: '✎';
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 12px;
+            color: #7895B2;
+        }
+
+        .editable-cell:hover::after {
+            opacity: 0.6;
+        }
+
+        body {
+            font-family: 'Vazir', 'BMitra', 'BYekan', 'Tahoma', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #7895B2 0%, #AEBDCA 50%, #7895B2 100%);
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+        }
+
+        /* Soft animated background overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(245, 239, 230, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            animation: softPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes softPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @font-face {
+            font-family: 'Vazir';
+            src: url('{% static "fonts/persian/Vazir.ttf" %}') format('truetype');
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: 'Vazir';
+            src: url('{% static "fonts/persian/Vazir-Bold.ttf" %}') format('truetype');
+            font-weight: bold;
+        }
+
+        @font-face {
+            font-family: 'Vazir';
+            src: url('{% static "fonts/persian/Vazir-Light.ttf" %}') format('truetype');
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-family: 'BMitra';
+            src: url('{% static "fonts/persian/BMitra.ttf" %}') format('truetype');
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: #F5EFE6;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(120, 149, 178, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.35);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7895B2 0%, #AEBDCA 50%, #7895B2 100%);
+            color: #F5EFE6;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(245, 239, 230, 0.1) 0%, transparent 70%);
+            animation: gentleDrift 15s ease-in-out infinite;
+        }
+
+        @keyframes gentleDrift {
+            0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+            50% { transform: translate(3%, 3%); opacity: 0.6; }
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .stats {
+            padding: 18px 30px;
+            background: #AEBDCA;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(120, 149, 178, 0.3);
+            font-weight: 500;
+            color: #F5EFE6;
+        }
+
+        .stats span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats strong {
+            color: #F5EFE6;
+            font-weight: 700;
+            background: rgba(120, 149, 178, 0.3);
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+                <div class="header">
+            <h1>📊 جدول عملکرد پرسنل</h1>
+            <p>سیستم مدیریت زمانبندی کارکنان</p>
+        </div>
+
+        <!-- ADD THIS USER INFO BAR HERE -->
+        <div class="user-info">
+            <span>👤 {{ user_name }}</span>
+            <span>
+                {% if user_position == 1 %}
+                    🔐 مدیر سیستم (دسترسی کامل)
+                {% elif user_position == 2 %}
+                    🔐 مدیر مرکز (دسترسی کامل)
+                {% elif user_position == 3 %}
+                    🔐 رئیس واحد (دسترسی محدود به واحد خود)
+                {% elif user_position == 4 %}
+                    🔐 کارمند عادی (دسترسی فقط به رکوردهای خود)
+                {% else %}
+                    🔐 کاربر
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="stats">
+            <!-- existing stats content -->
+        </div>
+
+        .filters {
+            padding: 25px 30px;
+            background: #F5EFE6;
+            border-bottom: 1px solid #E8DFCA;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            color: #7895B2;
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group select, .filter-group button {
+            padding: 10px 14px;
+            border: 2px solid #E8DFCA;
+            border-radius: 14px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .filter-group select:hover {
+            border-color: #7895B2;
+            box-shadow: 0 2px 8px rgba(120, 149, 178, 0.15);
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #7895B2;
+            box-shadow: 0 0 0 3px rgba(120, 149, 178, 0.2);
+        }
+
+        .filter-group button {
+            background: linear-gradient(135deg, #7895B2 0%, #AEBDCA 100%);
+            color: #F5EFE6;
+            border: none;
+            font-weight: 600;
+        }
+
+        .filter-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(120, 149, 178, 0.3);
+            background: linear-gradient(135deg, #AEBDCA 0%, #7895B2 100%);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #AEBDCA 0%, #7895B2 100%) !important;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(135deg, #7895B2 0%, #AEBDCA 100%) !important;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0;
+            max-width: 100%;
+            background: #F5EFE6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+            min-width: 1200px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #7895B2 0%, #AEBDCA 100%);
+            color: #F5EFE6;
+            padding: 16px 12px;
+            text-align: right;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            border-bottom: 3px solid #E8DFCA;
+        }
+
+        th:first-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        th:last-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #E8DFCA;
+            text-align: right;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            background-color: #F5EFE6;
+            color: #4A627A;
+        }
+
+        th:first-child, td:first-child {
+            white-space: nowrap;
+            min-width: 160px;
+            max-width: 220px;
+            font-weight: 600;
+            color: #7895B2;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover td {
+            background: #E8DFCA;
+            border-bottom-color: #7895B2;
+        }
+
+        tbody tr:hover {
+            transform: scale(1.01);
+        }
+
+        .pagination {
+            padding: 25px 30px;
+            text-align: center;
+            background: #AEBDCA;
+            border-top: 1px solid rgba(120, 149, 178, 0.3);
+        }
+
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 10px 18px;
+            margin: 0 5px;
+            text-decoration: none;
+            border-radius: 14px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .pagination a {
+            background: #F5EFE6;
+            color: #7895B2;
+            border: 2px solid #E8DFCA;
+        }
+
+        .pagination a:hover {
+            background: #7895B2;
+            color: #F5EFE6;
+            border-color: #7895B2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(120, 149, 178, 0.3);
+        }
+
+        .pagination .current {
+            background: linear-gradient(135deg, #7895B2 0%, #AEBDCA 100%);
+            color: #F5EFE6;
+            border: none;
+            box-shadow: 0 4px 12px rgba(120, 149, 178, 0.3);
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background: #7895B2;
+            color: #F5EFE6;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* User Info Bar */
+        .user-info {
+            background: #E8DFCA;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #7895B2;
+            border-bottom: 1px solid #d5ccb8;
+        }
+
+        .user-info span:first-child {
+            font-weight: 600;
+            color: #4A627A;
+        }
+
+        .user-info span:last-child {
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .filters {
+                flex-direction: column;
+            }
+            .filter-group {
+                width: 100%;
+            }
+            .filter-group select, .filter-group button {
+                width: 100%;
+            }
+            th, td {
+                font-size: 11px;
+                padding: 8px 6px;
+            }
+            .stats {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+
+        /* Scrollbar styling */
+        .table-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #E8DFCA;
+            border-radius: 10px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #7895B2;
+            border-radius: 10px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #AEBDCA;
+        }
+
+        /* Persian number styling */
+        .persian-number {
+            font-feature-settings: "ss02";
+            letter-spacing: 0;
+        }
+
+        /* Special styling for duration columns */
+        td:nth-child(6), td:nth-child(7), td:nth-child(8), td:nth-child(16) {
+            font-weight: 600;
+            color: #7895B2;
+        }
+    </style>
+</head>
+<!-- Add this after the header or in the stats bar -->
+<div class="user-info" style="padding: 10px 30px; background: #E8DFCA; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+    <span>👤 {{ user_name }}</span>
+    <span>
+        {% if user_position == 1 %}
+            🔐 مدیر سیستم (دسترسی کامل)
+        {% elif user_position == 2 %}
+            🔐 مدیر مرکز (دسترسی کامل)
+        {% elif user_position == 3 %}
+            🔐 رئیس واحد (دسترسی محدود به واحد خود)
+        {% elif user_position == 4 %}
+            🔐 کارمند عادی (دسترسی فقط به رکوردهای خود)
+        {% else %}
+            🔐 کاربر
+        {% endif %}
+    </span>
+</div>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 جدول عملکرد پرسنل</h1>
+            <p>سیستم مدیریت زمانبندی کارکنان</p>
+        </div>
+
+        <div class="stats">
+            <span>📈 تعداد کل رکوردها: <strong class="persian-number">{{ performances.paginator.count }}</strong></span>
+            <span>📄 نمایش: <strong class="persian-number">{{ performances.start_index }}</strong> - <strong class="persian-number">{{ performances.end_index }}</strong> از <strong class="persian-number">{{ performances.paginator.count }}</strong></span>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>🏢 واحد</label>
+                <select id="unitFilter">
+                    <option value="">همه واحدها</option>
+                    {% for unit in unit_list %}
+                    <option value="{{ unit.unit_id }}" {% if selected_unit == unit.unit_id|stringformat:"s" %}selected{% endif %}>
+                        {{ unit.unit_name_fa }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>👤 نام پرسنل</label>
+                <select id="staffFilter">
+                    <option value="">همه پرسنل</option>
+                    {% for staff in staff_list %}
+                    <option value="{{ staff.staff_id }}" {% if selected_staff == staff.staff_id|stringformat:"s" %}selected{% endif %}>
+                        {{ staff.staff_name_fa }} {{ staff.staff_family_fa }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>📅 سال</label>
+                <select id="yearFilter">
+                    <option value="">همه سال‌ها</option>
+                    {% for year in year_list %}
+                    <option value="{{ year.year_id }}" {% if selected_year == year.year_id|stringformat:"s" %}selected{% endif %}>
+                        {{ year.year_number }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>📆 ماه</label>
+                <select id="monthFilter">
+                    <option value="">همه ماه‌ها</option>
+                    {% for month in month_list %}
+                    <option value="{{ month.month_id }}" {% if selected_month == month.month_id|stringformat:"s" %}selected{% endif %}>
+                        {{ month.month_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button onclick="applyFilters()">🔍 اعمال فیلتر</button>
+            </div>
+
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button onclick="resetFilters()" class="btn-reset">🔄 ریست</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>نام پرسنل</th>
+                        <th>واحد</th>
+                        <th>سال</th>
+                        <th>ماه</th>
+                        <th>روزهای کاری</th>
+                        <th>اضافه کاری (ساعتی)</th>
+                        <th>مرخصی (ساعتی)</th>
+                        <th>غیبت (ساعتی)</th>
+                        <th>غیبت (روزانه)</th>
+                        <th>مرخصی سالانه</th>
+                        <th>مرخصی استعلاجی</th>
+                        <th>مرخصی تشویقی</th>
+                        <th>ماموریت روزانه</th>
+                        <th>اضافه کاری پیشنهادی</th>
+                        <th>جبرانی پیشنهادی</th>
+                        <th>مرخصی ساعتی تایید شده</th>
+                        <th>اضافه کاری تایید شده</th>
+                        <th>جبرانی تایید شده</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for perf in performances %}
+                    <tr>
+                        <td><strong>{{ perf.staff.staff_name_fa }} {{ perf.staff.staff_family_fa }}</strong></td>
+                        <td>{{ perf.staff.unit.unit_name_fa|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.year.year_number|default:"-" }}</td>
+                        <td>{{ perf.month.month_name|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_working_days|default:"-" }}</td>
+                        <td class="persian-number">{% if perf.performance_hourly_overtime %}{{ perf.performance_hourly_overtime }}{% else %}-{% endif %}</td>
+                        <td class="persian-number">{% if perf.performance_hourly_leave %}{{ perf.performance_hourly_leave }}{% else %}-{% endif %}</td>
+                        <td class="persian-number">{{ perf.performance_hourly_absence|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_daily_absence|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_annual_leave|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_sick_leave|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_daily_reward_leave|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_daily_mission|default:"-" }}</td>
+                        <td class="persian-number editable-cell" data-performance-id="{{ perf.performance_id }}" data-field="performance_proposed_overtime">
+                            {{ perf.performance_proposed_overtime|default:"-" }}
+                        </td>
+                        <td class="persian-number editable-cell" data-performance-id="{{ perf.performance_id }}" data-field="performance_proposed_compensatory_timeoff">
+                            {{ perf.performance_proposed_compensatory_timeoff|default:"-" }}
+                        </td>
+
+                        <td class="persian-number">{{ perf.performance_approved_hourly_leave|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_approved_overtime|default:"-" }}</td>
+                        <td class="persian-number">{{ perf.performance_approved_compensatory_timeoff|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="18" style="text-align: center; padding: 50px;">
+                            😊 هیچ رکورد عملکردی یافت نشد
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            {% if performances.has_previous %}
+                <a href="?page=1{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">اول</a>
+                <a href="?page={{ performances.previous_page_number }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">قبلی</a>
+            {% endif %}
+
+            <span class="current">
+                صفحه <span class="persian-number">{{ performances.number }}</span> از <span class="persian-number">{{ performances.paginator.num_pages }}</span>
+            </span>
+
+            {% if performances.has_next %}
+                <a href="?page={{ performances.next_page_number }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">بعدی</a>
+                <a href="?page={{ performances.paginator.num_pages }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">آخر</a>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            <p>© ۱۴۰۵ سیستم زمانبندی کارکنان | کل رکوردها: <span class="persian-number">{{ performances.paginator.count }}</span></p>
+        </div>
+    </div>
+
+    <script>
+        function applyFilters() {
+            const unit = document.getElementById('unitFilter').value;
+            const staff = document.getElementById('staffFilter').value;
+            const year = document.getElementById('yearFilter').value;
+            const month = document.getElementById('monthFilter').value;
+
+            let url = window.location.pathname + '?';
+            if (unit) url += `unit=${unit}&`;
+            if (staff) url += `staff=${staff}&`;
+            if (year) url += `year=${year}&`;
+            if (month) url += `month=${month}&`;
+            url += 'page=1';
+
+            window.location.href = url;
+        }
+
+        function resetFilters() {
+            window.location.href = window.location.pathname;
+        }
+
+        function toPersianNumber(input) {
+            if (!input && input !== 0) return input;
+            const persianMap = {
+                '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴',
+                '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹'
+            };
+            return String(input).replace(/\d/g, function(d) {
+                return persianMap[d];
+            });
+        }
+
+        function convertNumbersToPersian() {
+            document.querySelectorAll('.persian-number').forEach(el => {
+                if (el.innerText && /\d/.test(el.innerText)) {
+                    el.innerText = toPersianNumber(el.innerText);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', convertNumbersToPersian);
+    </script>
+
+<script>
+    // Existing functions (applyFilters, resetFilters, etc.)
+
+    // NEW: Inline editing for Head of Units
+    function makeEditable() {
+        // Check if user is Head of Unit (position_id=3)
+        const userPosition = {{ user_position|default:0 }};
+
+        if (userPosition !== 3) {
+            return; // Only Heads of Unit can edit
+        }
+
+        // Get all editable cells
+        const editableCells = document.querySelectorAll('.editable-cell');
+
+        editableCells.forEach(cell => {
+            cell.style.cursor = 'pointer';
+            cell.style.backgroundColor = '#fffef5';
+            cell.title = 'برای ویرایش دوبار کلیک کنید';
+
+            cell.addEventListener('dblclick', function(e) {
+                const currentValue = this.innerText;
+                const performanceId = this.dataset.performanceId;
+                const fieldName = this.dataset.field;
+
+                // Create input element
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = currentValue !== '-' ? currentValue : '';
+                input.style.width = '80px';
+                input.style.padding = '4px';
+                input.style.border = '2px solid #7895B2';
+                input.style.borderRadius = '8px';
+                input.style.fontFamily = 'inherit';
+                input.style.fontSize = '11px';
+                input.style.textAlign = 'center';
+
+                // Replace cell content with input
+                this.innerHTML = '';
+                this.appendChild(input);
+                input.focus();
+
+                // Handle save on Enter or blur
+                const saveValue = () => {
+                    let newValue = input.value.trim();
+                    if (newValue === '') {
+                        newValue = null;
+                    }
+
+                    // Send update to server
+                    fetch('/api/update-performance/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({
+                            performance_id: performanceId,
+                            field_name: fieldName,
+                            new_value: newValue
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            cell.innerText = newValue || '-';
+                            showToast('✓ ذخیره شد', 'success');
+                        } else {
+                            cell.innerText = currentValue;
+                            showToast('❌ خطا: ' + data.error, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        cell.innerText = currentValue;
+                        showToast('❌ خطا در ارتباط با سرور', 'error');
+                    });
+                };
+
+                input.addEventListener('blur', saveValue);
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        saveValue();
+                    }
+                });
+            });
+        });
+    }
+
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Toast notification
+    function showToast(message, type) {
+        let toast = document.getElementById('toast-notification');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toast-notification';
+            document.body.appendChild(toast);
+        }
+
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.right = '20px';
+        toast.style.padding = '12px 24px';
+        toast.style.borderRadius = '12px';
+        toast.style.color = 'white';
+        toast.style.fontSize = '14px';
+        toast.style.zIndex = '9999';
+        toast.style.fontWeight = '500';
+        toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+
+        if (type === 'success') {
+            toast.style.backgroundColor = '#4CAF50';
+        } else {
+            toast.style.backgroundColor = '#f44336';
+        }
+
+        toast.innerText = message;
+        toast.style.display = 'block';
+
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2000);
+    }
+
+    // Run after page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        convertNumbersToPersian();
+        makeEditable();
+    });
+</script>
+</body>
+</html>

@@ -19,7 +19,68 @@ from .serializers import (
 from .permissions import (
     IsAdmin, IsOfficeManager, IsHeadOfUnit, IsRegularStaff, CanViewStaffList
 )
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import json
 
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def update_performance_field(request):
+    """AJAX endpoint for Head of Units to update proposed fields"""
+
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
+
+    try:
+        current_staff = Staff.objects.get(user=request.user)
+    except Staff.DoesNotExist:
+        return JsonResponse({'error': 'Staff record not found'}, status=403)
+
+    # Only Head of Unit (position_id=3) can use this endpoint
+    if current_staff.position_id != 3:
+        return JsonResponse({'error': 'Permission denied'}, status=403)
+
+    data = json.loads(request.body)
+    performance_id = data.get('performance_id')
+    field_name = data.get('field_name')
+    new_value = data.get('new_value')
+
+    # Allowed fields for Head of Unit
+    allowed_fields = [
+        'performance_proposed_overtime',
+        'performance_proposed_compensatory_timeoff'
+    ]
+
+    if field_name not in allowed_fields:
+        return JsonResponse({'error': 'Field not editable'}, status=403)
+
+    try:
+        performance = Performance.objects.get(performance_id=performance_id)
+
+        # Verify this performance belongs to staff in Head's unit
+        if performance.staff.unit_id != current_staff.unit_id:
+            return JsonResponse({'error': 'You can only edit records for your unit'}, status=403)
+
+        # Update the field
+        if new_value == '' or new_value is None:
+            setattr(performance, field_name, None)
+        else:
+            setattr(performance, field_name, new_value)
+
+        performance.save()
+
+        return JsonResponse({
+            'success': True,
+            'message': 'به‌روزرسانی شد',
+            'new_value': new_value
+        })
+
+    except Performance.DoesNotExist:
+        return JsonResponse({'error': 'Performance record not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def api_root(request):
@@ -194,12 +255,125 @@ def performance_table(request):
 
     context = {
         'performances': page_obj,
-        'staff_list': Staff.objects.all().order_by('staff_name_eng'),
+        'unit_list': unit_list.order_by('unit_name_fa') if hasattr(unit_list, 'order_by') else unit_list,
+        'staff_list': staff_list.order_by('staff_name_fa') if hasattr(staff_list, 'order_by') else staff_list,
         'year_list': Year.objects.all().order_by('-year_number'),
         'month_list': Month.objects.all().order_by('month_id'),
+        'selected_unit': unit_id,
         'selected_staff': staff_id,
         'selected_year': year_id,
         'selected_month': month_id,
+        'user_position': position_id,  # ← ADD THIS
+        'user_name': current_staff.staff_name_fa,  # ← ADD THIS
     }
 
     return render(request, 'performance_table.html', context)
+
+
+def performance_table_fa(request):
+    """Persian/RTL HTML table view for performance records with role-based permissions"""
+
+    from django.core.paginator import Paginator
+    from django.shortcuts import redirect
+    from django.contrib.auth.models import User
+    from .models import Performance, Staff, Year, Month, Unit
+
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        return redirect('/api-auth/login/?next=' + request.path)
+
+    # Get the staff record for the logged-in user
+    try:
+        current_staff = Staff.objects.get(user=request.user)
+    except Staff.DoesNotExist:
+        # If user is not linked to staff, they can't see anything
+        return render(request, 'performance_table_fa.html', {
+            'performances': [],
+            'unit_list': [],
+            'staff_list': [],
+            'year_list': Year.objects.all().order_by('-year_number'),
+            'month_list': Month.objects.all().order_by('month_id'),
+            'error_message': 'شما دسترسی به این صفحه ندارید'
+        })
+
+    position_id = current_staff.position_id
+
+    # Base queryset
+    performances = Performance.objects.select_related(
+        'staff', 'staff__unit', 'staff__position', 'year', 'month'
+    )
+
+    # Apply role-based permissions
+    if position_id == 1:  # Administrator - can see everything
+        performances = performances.all()
+        staff_list = Staff.objects.all()
+        unit_list = Unit.objects.all()
+
+    elif position_id == 2:  # Office Manager - can see everything
+        performances = performances.all()
+        staff_list = Staff.objects.all()
+        unit_list = Unit.objects.all()
+
+    elif position_id == 3:  # Head of Unit - can only see their unit
+        unit_id = current_staff.unit_id
+        performances = performances.filter(staff__unit_id=unit_id)
+        staff_list = Staff.objects.filter(unit_id=unit_id)
+        unit_list = Unit.objects.filter(unit_id=unit_id)
+
+    elif position_id == 4:  # Regular Staff - can only see themselves
+        staff_id = current_staff.staff_id
+        performances = performances.filter(staff_id=staff_id)
+        staff_list = Staff.objects.filter(staff_id=staff_id)
+        unit_list = Unit.objects.filter(unit_id=current_staff.unit_id)
+
+    else:
+        performances = performances.none()
+        staff_list = []
+        unit_list = []
+
+    # Apply filters (only if user has permission to see the filtered data)
+    unit_id = request.GET.get('unit')
+    staff_id = request.GET.get('staff')
+    year_id = request.GET.get('year')
+    month_id = request.GET.get('month')
+
+    # For Heads of Unit, ensure they can only filter within their unit
+    if position_id == 3 and unit_id:
+        # Check if the filtered unit is their unit
+        if int(unit_id) != current_staff.unit_id:
+            unit_id = None  # Ignore invalid filter
+
+    # For Regular Staff, ensure they can only filter themselves
+    if position_id == 4 and staff_id:
+        if int(staff_id) != current_staff.staff_id:
+            staff_id = None  # Ignore invalid filter
+
+    if unit_id:
+        performances = performances.filter(staff__unit_id=unit_id)
+    if staff_id:
+        performances = performances.filter(staff_id=staff_id)
+    if year_id:
+        performances = performances.filter(year_id=year_id)
+    if month_id:
+        performances = performances.filter(month_id=month_id)
+
+    # Pagination (50 records per page)
+    paginator = Paginator(performances, 50)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'performances': page_obj,
+        'unit_list': unit_list.order_by('unit_name_fa') if hasattr(unit_list, 'order_by') else unit_list,
+        'staff_list': staff_list.order_by('staff_name_fa') if hasattr(staff_list, 'order_by') else staff_list,
+        'year_list': Year.objects.all().order_by('-year_number'),
+        'month_list': Month.objects.all().order_by('month_id'),
+        'selected_unit': unit_id,
+        'selected_staff': staff_id,
+        'selected_year': year_id,
+        'selected_month': month_id,
+        'user_position': position_id,
+        'user_name': f'{current_staff.staff_name_fa} {current_staff.staff_family_fa}',
+    }
+
+    return render(request, 'performance_table_fa.html', context)
