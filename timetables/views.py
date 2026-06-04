@@ -1,3 +1,6 @@
+from django.contrib.auth import update_session_auth_hash
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -356,3 +359,110 @@ def performance_table_fa(request):
     }
 
     return render(request, 'performance_table_fa.html', context)
+
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.models import User
+
+
+def change_password_page(request):
+    """Password change page"""
+    if not request.user.is_authenticated:
+        return redirect('/api-auth/login/?next=' + request.path)
+
+    # Get user's staff record for display
+    try:
+        current_staff = Staff.objects.get(user=request.user)
+        user_name = f'{current_staff.staff_name_fa} {current_staff.staff_family_fa}'
+    except Staff.DoesNotExist:
+        user_name = request.user.username
+
+    return render(request, 'change_password.html', {
+        'user_name': user_name
+    })
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def change_password_api(request):
+    """API endpoint for changing password"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
+
+    try:
+        data = json.loads(request.body)
+        old_password = data.get('old_password')
+        new_password = data.get('new_password')
+
+        # Check old password
+        if not request.user.check_password(old_password):
+            return JsonResponse({'error': 'Wrong password'}, status=400)
+
+        # Validate new password
+        if not new_password or len(new_password) < 4:
+            return JsonResponse({'error': 'Password must be at least 4 characters'}, status=400)
+
+        # Set new password
+        request.user.set_password(new_password)
+        request.user.save()
+
+        # Update session to prevent logout
+        update_session_auth_hash(request, request.user)
+
+        return JsonResponse({'success': True, 'message': 'Password changed successfully'})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+def change_password_page(request):
+    """Password change page"""
+    if not request.user.is_authenticated:
+        return redirect('/api-auth/login/?next=' + request.path)
+
+    try:
+        current_staff = Staff.objects.get(user=request.user)
+        user_name = f'{current_staff.staff_name_fa} {current_staff.staff_family_fa}'
+    except Staff.DoesNotExist:
+        user_name = request.user.username
+
+    return render(request, 'change_password.html', {
+        'user_name': user_name
+    })
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def change_password_api(request):
+    """API endpoint for changing password"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
+
+    try:
+        data = json.loads(request.body)
+        old_password = data.get('old_password')
+        new_password = data.get('new_password')
+
+        # Check old password
+        if not request.user.check_password(old_password):
+            return JsonResponse({'error': 'Wrong password'}, status=400)
+
+        # Validate new password
+        if not new_password or len(new_password) < 4:
+            return JsonResponse({'error': 'Password must be at least 4 characters'}, status=400)
+
+        # Set new password
+        request.user.set_password(new_password)
+        request.user.save()
+
+        # Update session to prevent logout
+        update_session_auth_hash(request, request.user)
+
+        return JsonResponse({'success': True, 'message': 'Password changed successfully'})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

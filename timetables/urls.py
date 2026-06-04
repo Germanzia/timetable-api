@@ -13,8 +13,11 @@ router.register(r'staff', views.StaffViewSet)
 router.register(r'performance', views.PerformanceViewSet)
 
 urlpatterns = [
+    path('', views.api_root, name='api-root'),
     path('performance-table/', views.performance_table, name='performance_table'),
     path('performance-table-fa/', views.performance_table_fa, name='performance_table_fa'),
+    path('change-password/', views.change_password_page, name='change_password'),
+    path('change-password-api/', views.change_password_api, name='change_password_api'),
     path('update-performance/', views.update_performance_field, name='update_performance'),
     path('', include(router.urls)),
 ]

@@ -105,6 +105,28 @@
             border-bottom: 1px solid rgba(48, 56, 65, 0.1);
         }
 
+        .user-info a {
+            color: #F5F5F5;
+            text-decoration: none;
+            background: rgba(48, 56, 65, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            margin-left: 8px;
+            font-size: 12px;
+        }
+
+        .user-info a:hover {
+            background: rgba(48, 56, 65, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .user-info div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .user-info span:last-child {
             background: rgba(48, 56, 65, 0.3);
             padding: 4px 14px;
@@ -460,22 +482,26 @@
             <p>سیستم مدیریت زمانبندی کارکنان</p>
         </div>
 
-        <div class="user-info">
-            <span>👤 {{ user_name|default:"کاربر" }}</span>
+    <div class="user-info">
+        <span>👤 {{ user_name|default:"کاربر" }}</span>
+        <div>
+            <a href="/api/change-password/">🔐 تغییر رمز</a>
+            <a href="/api-auth/logout/" onclick="return confirm('آیا از خروج از سیستم اطمینان دارید؟');">🚪 خروج</a>
             <span>
                 {% if user_position == 1 %}
-                    🔐 مدیر سیستم (دسترسی کامل)
+                    🔐 مدیر سیستم
                 {% elif user_position == 2 %}
-                    ✏️ مدیر مرکز (ویرایش ستون‌های تایید شده)
+                    ✏️ مدیر مرکز
                 {% elif user_position == 3 %}
-                    ✏️ رئیس واحد (ویرایش ستون‌های پیشنهادی)
+                    ✏️ رئیس واحد
                 {% elif user_position == 4 %}
-                    👁️ کارمند عادی (فقط مشاهده)
+                    👁️ کارمند عادی
                 {% else %}
                     🔐 کاربر
                 {% endif %}
             </span>
         </div>
+    </div>
 
         <div class="stats">
             <span>📈 تعداد کل رکوردها: <strong class="stats-number">{{ performances.paginator.count }}</strong></span>
@@ -533,7 +559,7 @@
 
             <div class="button-group">
                 <button class="btn-apply" onclick="applyFilters()">🔍 اعمال فیلتر</button>
-                <button class="btn-reset" onclick="resetFilters()">🔄 ریست</button>
+                <button class="btn-reset" onclick="resetFilters()">🔄 بازنشانی</button>
             </div>
         </div>
 
