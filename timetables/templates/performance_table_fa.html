@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جدول عملکرد پرسنل | سیستم مدیریت زمانبندی</title>
-
     {% load static %}
 
     <style>
+        /* ============================================================
+           RESET & BASE STYLES
+        ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -33,6 +35,9 @@
             pointer-events: none;
         }
 
+        /* ============================================================
+           FONTS
+        ============================================================ */
         @font-face {
             font-family: 'Vazir';
             src: url('{% static "fonts/persian/Vazir.ttf" %}') format('truetype');
@@ -45,6 +50,9 @@
             font-weight: bold;
         }
 
+        /* ============================================================
+           CONTAINER & HEADER
+        ============================================================ */
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -93,6 +101,9 @@
             font-size: 13px;
         }
 
+        /* ============================================================
+           USER INFO BAR
+        ============================================================ */
         .user-info {
             background: #76ABAE;
             padding: 10px 28px;
@@ -133,6 +144,9 @@
             border-radius: 20px;
         }
 
+        /* ============================================================
+           STATS BAR
+        ============================================================ */
         .stats {
             padding: 14px 28px;
             background: #76ABAE;
@@ -158,6 +172,9 @@
             border-radius: 20px;
         }
 
+        /* ============================================================
+           FILTERS
+        ============================================================ */
         .filters {
             padding: 20px 28px;
             background: #F5F5F5;
@@ -232,6 +249,9 @@
             box-shadow: 0 4px 10px rgba(255, 87, 34, 0.4);
         }
 
+        /* ============================================================
+           SUMMARY CONTROLS
+        ============================================================ */
         .summary-controls {
             padding: 12px 28px;
             background: #e8e8e8;
@@ -256,6 +276,9 @@
             background: white;
         }
 
+        /* ============================================================
+           TABLE
+        ============================================================ */
         .table-wrapper {
             overflow-x: auto;
             overflow-y: visible;
@@ -296,7 +319,7 @@
         }
 
         /* Fixed column widths */
-        th:nth-child(1), td:nth-child(1) { width: 150px; min-width: 150px; }
+        th:nth-child(1), td:nth-child(1) { width: 150px; min-width: 150px; text-align: right; }
         th:nth-child(2), td:nth-child(2) { width: 110px; min-width: 110px; }
         th:nth-child(3), td:nth-child(3) { width: 60px; min-width: 60px; }
         th:nth-child(4), td:nth-child(4) { width: 70px; min-width: 70px; }
@@ -315,15 +338,14 @@
         th:nth-child(17), td:nth-child(17) { width: 100px; min-width: 100px; }
         th:nth-child(18), td:nth-child(18) { width: 100px; min-width: 100px; }
 
-        th:first-child, td:first-child {
-            text-align: right;
-        }
-
         tbody tr:hover td {
             background: #e8e8e8;
             border-bottom-color: #76ABAE;
         }
 
+        /* ============================================================
+           SUMMARY ROW
+        ============================================================ */
         .summary-row td {
             background: #76ABAE !important;
             color: #F5F5F5 !important;
@@ -338,6 +360,9 @@
             font-weight: 800 !important;
         }
 
+        /* ============================================================
+           EDITABLE CELLS
+        ============================================================ */
         .head-editable {
             background-color: #FFF8E0 !important;
             cursor: pointer;
@@ -382,6 +407,9 @@
             color: #4CAF50;
         }
 
+        /* ============================================================
+           PAGINATION
+        ============================================================ */
         .pagination {
             padding: 18px 28px;
             text-align: center;
@@ -418,6 +446,9 @@
             border: none;
         }
 
+        /* ============================================================
+           FOOTER & UTILITIES
+        ============================================================ */
         .footer {
             padding: 16px;
             text-align: center;
@@ -437,20 +468,18 @@
             .summary-controls { justify-content: center; }
         }
 
+        /* Scrollbar */
         .table-wrapper::-webkit-scrollbar {
             height: 8px;
         }
-
         .table-wrapper::-webkit-scrollbar-track {
             background: #e0e0e0;
             border-radius: 10px;
         }
-
         .table-wrapper::-webkit-scrollbar-thumb {
             background: #76ABAE;
             border-radius: 10px;
         }
-
         .table-wrapper::-webkit-scrollbar-thumb:hover {
             background: #FF5722;
         }
@@ -477,37 +506,38 @@
 
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
             <h1>📊 جدول عملکرد پرسنل</h1>
             <p>سیستم مدیریت زمانبندی کارکنان</p>
         </div>
 
+        <!-- User Info Bar -->
     <div class="user-info">
         <span>👤 {{ user_name|default:"کاربر" }}</span>
         <div>
-            <a href="/api/change-password/">🔐 تغییر رمز</a>
-            <a href="/api-auth/logout/" onclick="return confirm('آیا از خروج از سیستم اطمینان دارید؟');">🚪 خروج</a>
+            {% if user_position == 1 %}
+                <a href="/import/" style="background: #FF5722;">📥 ورود اطلاعات</a>
+            {% endif %}
+            <a href="/change-password/">🔐 تغییر رمز</a>
+            <a href="/logout/" onclick="return confirm('آیا از خروج از سیستم اطمینان دارید؟');">🚪 خروج</a>
             <span>
-                {% if user_position == 1 %}
-                    🔐 مدیر سیستم
-                {% elif user_position == 2 %}
-                    ✏️ مدیر مرکز
-                {% elif user_position == 3 %}
-                    ✏️ رئیس واحد
-                {% elif user_position == 4 %}
-                    👁️ کارمند عادی
-                {% else %}
-                    🔐 کاربر
-                {% endif %}
+                {% if user_position == 1 %}🔐 مدیر سیستم
+                {% elif user_position == 2 %}✏️ مدیر مرکز
+                {% elif user_position == 3 %}✏️ رئیس واحد
+                {% elif user_position == 4 %}👁️ کارمند عادی
+                {% else %}🔐 کاربر{% endif %}
             </span>
         </div>
     </div>
 
+        <!-- Stats -->
         <div class="stats">
             <span>📈 تعداد کل رکوردها: <strong class="stats-number">{{ performances.paginator.count }}</strong></span>
             <span>📄 نمایش: <strong class="stats-number">{{ performances.start_index }}</strong> - <strong class="stats-number">{{ performances.end_index }}</strong> از <strong class="stats-number">{{ performances.paginator.count }}</strong></span>
         </div>
 
+        <!-- Filters -->
         <div class="filters">
             <div class="filter-group">
                 <label>🏢 واحد</label>
@@ -563,6 +593,7 @@
             </div>
         </div>
 
+        <!-- Summary Controls -->
         <div class="summary-controls">
             <label>📊 نوع جمع‌بندی:</label>
             <select id="summaryType">
@@ -571,6 +602,7 @@
             </select>
         </div>
 
+        <!-- Performance Table -->
         <div class="table-wrapper">
             <table id="performanceTable">
                 <thead>
@@ -611,14 +643,14 @@
                         <td class="persian-number numeric" data-raw="{{ perf.performance_sick_leave|default:0 }}">{{ perf.performance_sick_leave|default:"0" }}</td>
                         <td class="persian-number numeric" data-raw="{{ perf.performance_daily_reward_leave|default:0 }}">{{ perf.performance_daily_reward_leave|default:"0" }}</td>
                         <td class="persian-number numeric" data-raw="{{ perf.performance_daily_mission|default:0 }}">{{ perf.performance_daily_mission|default:"0" }}</td>
-
+                        <!-- Proposed fields (Head of Unit editable - yellow) -->
                         <td class="persian-number numeric head-editable" data-field="performance_proposed_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_overtime|default:0 }}">
                             {{ perf.performance_proposed_overtime|default:"0" }}
                         </td>
                         <td class="persian-number numeric head-editable" data-field="performance_proposed_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_compensatory_timeoff|default:0 }}">
                             {{ perf.performance_proposed_compensatory_timeoff|default:"0" }}
                         </td>
-
+                        <!-- Approved fields (Office Manager editable - green) -->
                         <td class="persian-number numeric duration office-editable" data-field="performance_approved_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_hourly_leave|default:'0' }}">
                             {{ perf.performance_approved_hourly_leave|default:"0" }}
                         </td>
@@ -637,11 +669,11 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot id="summaryRow">
-                </tfoot>
+                <tfoot id="summaryRow"></tfoot>
             </table>
         </div>
 
+        <!-- Pagination -->
         <div class="pagination">
             <span class="step-links">
                 {% if performances.has_previous %}
@@ -660,6 +692,7 @@
             </span>
         </div>
 
+        <!-- Footer -->
         <div class="footer">
             <p>© ۱۴۰۵ سیستم زمانبندی کارکنان | کل رکوردها: <span class="footer-number">{{ performances.paginator.count }}</span></p>
         </div>
@@ -668,7 +701,9 @@
     <div id="toast-notification"></div>
 
     <script>
-        // Get all staff data with their unit IDs for dynamic filtering
+        // ============================================================
+        // DATA & UTILITIES
+        // ============================================================
         const allStaffData = [
             {% for staff in all_staff_list %}
             { id: '{{ staff.staff_id }}', name: '{{ staff.staff_name_fa }} {{ staff.staff_family_fa }}', unitId: '{{ staff.unit_id }}' },
@@ -681,9 +716,7 @@
                 '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
                 '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9'
             };
-            return String(input).replace(/[۰-۹]/g, function(d) {
-                return persianMap[d];
-            });
+            return String(input).replace(/[۰-۹]/g, d => persianMap[d]);
         }
 
         function toPersianNumber(input) {
@@ -692,60 +725,35 @@
                 '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴',
                 '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹'
             };
-            return String(input).replace(/\d/g, function(d) {
-                return persianMap[d];
-            });
+            return String(input).replace(/\d/g, d => persianMap[d]);
         }
 
-        function filterStaffByUnit() {
-            const userPosition = {{ user_position|default:0 }};
-            // Only apply for Office Manager (position_id=2)
-            if (userPosition !== 2) return;
-
-            const selectedUnit = document.getElementById('unitFilter').value;
-            const staffSelect = document.getElementById('staffFilter');
-            const currentSelectedValue = staffSelect.value;
-
-            // Clear existing options
-            staffSelect.innerHTML = '<option value="">همه پرسنل</option>';
-
-            // Filter and add staff based on selected unit
-            const filteredStaff = selectedUnit === ''
-                ? allStaffData
-                : allStaffData.filter(staff => staff.unitId === selectedUnit);
-
-            filteredStaff.forEach(staff => {
-                const option = document.createElement('option');
-                option.value = staff.id;
-                option.textContent = staff.name;
-                staffSelect.appendChild(option);
-            });
-
-            // Restore previously selected value if still valid
-            if (currentSelectedValue && filteredStaff.some(s => s.id === currentSelectedValue)) {
-                staffSelect.value = currentSelectedValue;
-            }
-        }
-
+        // ============================================================
+        // NUMBER CONVERSION
+        // ============================================================
         function convertAllNumbersToPersian() {
+            // Stats, page, footer numbers
             document.querySelectorAll('.stats-number, .page-number, .footer-number').forEach(el => {
                 if (el.innerText && /\d/.test(el.innerText)) {
                     el.innerText = toPersianNumber(el.innerText);
                 }
             });
 
+            // Year dropdown
             document.querySelectorAll('#yearFilter option').forEach(el => {
                 if (el.innerText && /\d/.test(el.innerText) && el.innerText !== 'همه سال‌ها') {
                     el.innerText = toPersianNumber(el.innerText);
                 }
             });
 
+            // Pagination numbers
             document.querySelectorAll('.pagination a, .pagination span').forEach(el => {
                 if (el.innerText && /\d/.test(el.innerText) && !el.innerText.includes('اول') && !el.innerText.includes('قبلی') && !el.innerText.includes('بعدی') && !el.innerText.includes('آخر')) {
                     el.innerText = toPersianNumber(el.innerText);
                 }
             });
 
+            // Table numbers
             document.querySelectorAll('.persian-number').forEach(el => {
                 if (el.innerText && /\d/.test(el.innerText) && el.innerText !== '-') {
                     if (el.classList.contains('duration')) {
@@ -762,15 +770,42 @@
             });
         }
 
+        // ============================================================
+        // DYNAMIC STAFF FILTER (Office Manager only)
+        // ============================================================
+        function filterStaffByUnit() {
+            const userPosition = {{ user_position|default:0 }};
+            if (userPosition !== 2) return;
+
+            const selectedUnit = document.getElementById('unitFilter').value;
+            const staffSelect = document.getElementById('staffFilter');
+            const currentSelectedValue = staffSelect.value;
+
+            staffSelect.innerHTML = '<option value="">همه پرسنل</option>';
+            const filteredStaff = selectedUnit === '' ? allStaffData : allStaffData.filter(s => s.unitId === selectedUnit);
+
+            filteredStaff.forEach(staff => {
+                const option = document.createElement('option');
+                option.value = staff.id;
+                option.textContent = staff.name;
+                staffSelect.appendChild(option);
+            });
+
+            if (currentSelectedValue && filteredStaff.some(s => s.id === currentSelectedValue)) {
+                staffSelect.value = currentSelectedValue;
+            }
+        }
+
+        // ============================================================
+        // DURATION PARSING & FORMATTING
+        // ============================================================
         function parseDuration(durationStr) {
             if (!durationStr || durationStr === '0' || durationStr === '-' || durationStr === '') return 0;
             let englishStr = toEnglishNumber(durationStr);
             if (englishStr.includes(':')) {
                 const parts = englishStr.split(':');
                 if (parts.length >= 2) {
-                    const hours = parseInt(parts[0]) || 0;
-                    const minutes = parseInt(parts[1]) || 0;
-                    return (hours * 60) + minutes;
+                    return (parseInt(parts[0]) || 0) * 60 + (parseInt(parts[1]) || 0);
                 }
             }
             const num = parseFloat(englishStr);
@@ -784,6 +819,9 @@
             return toPersianNumber(hours.toString()) + ':' + toPersianNumber(minutes.toString().padStart(2, '0'));
         }
 
+        // ============================================================
+        // SUMMARY CALCULATION
+        // ============================================================
         function calculateSummary() {
             const summaryType = document.getElementById('summaryType').value;
             const rows = document.querySelectorAll('#performanceTable tbody tr');
@@ -827,8 +865,7 @@
 
                 if (isDuration) {
                     let value = summaryType === 'sum' ? durationSums[col] : durationSums[col] / count;
-                    let formatted = formatDuration(Math.round(value));
-                    summaryCells.push(`<td style="text-align: center;">${formatted}</td>`);
+                    summaryCells.push(`<td style="text-align: center;">${formatDuration(Math.round(value))}</td>`);
                 } else {
                     let value = summaryType === 'sum' ? numberSums[col] : numberSums[col] / count;
                     let rounded = Math.round(value * 10) / 10;
@@ -836,7 +873,7 @@
                 }
             }
 
-            document.getElementById('summaryRow').innerHTML = `<tr class="summary-row">${summaryCells.join('')}</tr>`;
+            document.getElementById('summaryRow').innerHTML = `<tr class="summary-row">${summaryCells.join('')}</table>`;
 
             // Apply Persian numbers to summary row
             document.querySelectorAll('#summaryRow td').forEach(td => {
@@ -853,6 +890,9 @@
             });
         }
 
+        // ============================================================
+        // FILTER FUNCTIONS
+        // ============================================================
         function applyFilters() {
             const unit = document.getElementById('unitFilter').value;
             const staff = document.getElementById('staffFilter').value;
@@ -871,12 +911,15 @@
             window.location.href = window.location.pathname;
         }
 
+        // ============================================================
+        // COOKIE & TOAST UTILITIES
+        // ============================================================
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
@@ -894,12 +937,16 @@
             setTimeout(() => toast.style.display = 'none', 2000);
         }
 
+        // ============================================================
+        // INLINE EDITING (Role-based)
+        // ============================================================
         function makeEditable() {
             const userPosition = {{ user_position|default:0 }};
 
+            // Head of Unit (position_id=3) - Edit proposed fields (yellow)
             if (userPosition === 3) {
                 document.querySelectorAll('.head-editable').forEach(cell => {
-                    cell.addEventListener('dblclick', function(e) {
+                    cell.addEventListener('dblclick', function() {
                         const currentValue = this.innerText;
                         const currentRaw = this.getAttribute('data-raw');
                         const performanceId = this.dataset.performanceId;
@@ -907,13 +954,7 @@
                         const input = document.createElement('input');
                         input.type = 'text';
                         input.value = currentRaw !== '0' ? toEnglishNumber(currentValue) : '';
-                        input.style.width = '70px';
-                        input.style.padding = '4px';
-                        input.style.border = '2px solid #FF5722';
-                        input.style.borderRadius = '8px';
-                        input.style.fontFamily = 'inherit';
-                        input.style.fontSize = '11px';
-                        input.style.textAlign = 'center';
+                        input.style.cssText = 'width:70px;padding:4px;border:2px solid #FF5722;border-radius:8px;font-family:inherit;font-size:11px;text-align:center;';
                         this.innerHTML = '';
                         this.appendChild(input);
                         input.focus();
@@ -929,9 +970,8 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    const displayValue = newValue || '0';
-                                    this.setAttribute('data-raw', displayValue);
-                                    this.innerText = toPersianNumber(displayValue);
+                                    this.setAttribute('data-raw', newValue || '0');
+                                    this.innerText = toPersianNumber(newValue || '0');
                                     showToast('✓ ذخیره شد', 'success');
                                     calculateSummary();
                                 } else {
@@ -950,9 +990,10 @@
                 });
             }
 
+            // Office Manager (position_id=2) - Edit approved fields (green)
             if (userPosition === 2) {
                 document.querySelectorAll('.office-editable').forEach(cell => {
-                    cell.addEventListener('dblclick', function(e) {
+                    cell.addEventListener('dblclick', function() {
                         const currentValue = this.innerText;
                         const currentRaw = this.getAttribute('data-raw');
                         const performanceId = this.dataset.performanceId;
@@ -960,13 +1001,7 @@
                         const input = document.createElement('input');
                         input.type = 'text';
                         input.value = currentRaw !== '0' ? toEnglishNumber(currentValue) : '';
-                        input.style.width = '80px';
-                        input.style.padding = '4px';
-                        input.style.border = '2px solid #4CAF50';
-                        input.style.borderRadius = '8px';
-                        input.style.fontFamily = 'inherit';
-                        input.style.fontSize = '11px';
-                        input.style.textAlign = 'center';
+                        input.style.cssText = 'width:80px;padding:4px;border:2px solid #4CAF50;border-radius:8px;font-family:inherit;font-size:11px;text-align:center;';
                         this.innerHTML = '';
                         this.appendChild(input);
                         input.focus();
@@ -982,9 +1017,8 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    const displayValue = newValue || '0';
-                                    this.setAttribute('data-raw', displayValue);
-                                    this.innerText = toPersianNumber(displayValue);
+                                    this.setAttribute('data-raw', newValue || '0');
+                                    this.innerText = toPersianNumber(newValue || '0');
                                     showToast('✓ ذخیره شد', 'success');
                                     calculateSummary();
                                 } else {
@@ -1004,6 +1038,9 @@
             }
         }
 
+        // ============================================================
+        // INITIALIZATION
+        // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
             convertAllNumbersToPersian();
             makeEditable();

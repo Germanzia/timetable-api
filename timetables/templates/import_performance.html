@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود اطلاعات عملکرد | سیستم مدیریت زمانبندی</title>
+    {% load static %}
+
+    <style>
+        /* ============================================================
+           RESET & BASE STYLES
+        ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazir', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #303841 0%, #1a1f24 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* ============================================================
+           CONTAINER
+        ============================================================ */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #F5F5F5;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        /* ============================================================
+           HEADER
+        ============================================================ */
+        .header {
+            background: linear-gradient(135deg, #303841 0%, #76ABAE 100%);
+            color: white;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.85;
+            font-size: 13px;
+        }
+
+        /* ============================================================
+           USER INFO BAR
+        ============================================================ */
+        .user-info {
+            background: #76ABAE;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            border-bottom: 1px solid rgba(48, 56, 65, 0.1);
+        }
+
+        .user-info a {
+            color: white;
+            text-decoration: none;
+            background: rgba(48, 56, 65, 0.3);
+            padding: 5px 14px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            font-size: 13px;
+        }
+
+        .user-info a:hover {
+            background: rgba(48, 56, 65, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* ============================================================
+           CONTENT
+        ============================================================ */
+        .content {
+            padding: 30px;
+        }
+
+        /* Coming Soon Section */
+        .coming-soon {
+            text-align: center;
+            padding: 50px 30px;
+            background: #e8e8e8;
+            border-radius: 16px;
+            margin: 10px 0;
+        }
+
+        .coming-soon h2 {
+            color: #76ABAE;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .coming-soon p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .coming-soon .small-text {
+            font-size: 12px;
+            margin-top: 15px;
+            color: #888;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #76ABAE;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #5a8a8d;
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        .footer {
+            padding: 16px;
+            text-align: center;
+            background: #303841;
+            color: #76ABAE;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📥 ورود اطلاعات عملکرد</h1>
+            <p>بارگذاری فایل Excel عملکرد ماهانه</p>
+        </div>
+
+        <!-- User Info Bar -->
+        <div class="user-info">
+            <span>👤 {{ user_name|default:"مدیر سیستم" }}</span>
+            <a href="/dashboard/">← بازگشت به داشبورد</a>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="coming-soon">
+                <h2>⚙️ در حال توسعه</h2>
+                <p>این بخش به زودی تکمیل خواهد شد</p>
+                <p class="small-text">برای وارد کردن اطلاعات عملکرد ماهانه از فایل Excel</p>
+            </div>
+            <a href="/dashboard/" class="back-link">← بازگشت به جدول عملکرد</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© ۱۴۰۵ سیستم زمانبندی کارکنان</p>
+        </div>
+    </div>
+</body>
+</html>
