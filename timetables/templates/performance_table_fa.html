@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Vazir', 'BMitra', 'BYekan', 'Tahoma', 'Segoe UI', sans-serif;
-            background: white;
+            background: linear-gradient(135deg,#f8fafc 0%,#eef6fb 100%);
             min-height: 100vh;
             padding: 30px;
             position: relative;
@@ -58,7 +58,7 @@
             margin: 0 auto;
             background: #F6F1F1;
             border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 60px rgba(15,23,42,.12); backdrop-filter: blur(12px);
             overflow: hidden;
         }
 
@@ -185,6 +185,11 @@
             align-items: flex-end;
         }
 
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
         .filter-group label {
             font-size: 11px;
             color: #146C94;
@@ -199,7 +204,7 @@
             font-size: 13px;
             cursor: pointer;
             font-family: inherit;
-            background: white;
+            background: linear-gradient(135deg,#f8fafc 0%,#eef6fb 100%);
             min-width: 130px;
         }
 
@@ -268,7 +273,7 @@
             border: 1px solid #19A7CE;
             font-family: inherit;
             font-size: 12px;
-            background: white;
+            background: linear-gradient(135deg,#f8fafc 0%,#eef6fb 100%);
         }
 
         /* ============================================================
@@ -309,7 +314,7 @@
             text-align: center;
             font-size: 11px;
             background-color: #F6F1F1;
-            color: #146C94;
+            color: black;
             white-space: nowrap;
         }
 
@@ -501,7 +506,7 @@
             border-radius: 10px;
         }
         .table-wrapper::-webkit-scrollbar-thumb:hover {
-            background: white;
+            background: linear-gradient(135deg,#f8fafc 0%,#eef6fb 100%);
         }
 
         .persian-number {
@@ -521,7 +526,17 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             display: none;
         }
-    </style>
+
+:root{
+--primary:#0f766e;
+--secondary:#14b8a6;
+--surface:#fff;
+--border:#e5e7eb;
+}
+tbody tr{transition:all .18s ease;}
+tbody tr:hover{transform:translateY(-1px);}
+
+</style>
 </head>
 
 <body>
@@ -561,7 +576,7 @@
         <div class="filters">
             <div class="filter-group">
                 <label>🏢 واحد</label>
-                <select id="unitFilter" onchange="filterStaffByUnit()">
+                <select id="unitFilter" onchange="updateStaffDropdown()">
                     <option value="">همه واحدها</option>
                     {% for unit in unit_list %}
                     <option value="{{ unit.unit_id }}" {% if selected_unit == unit.unit_id|stringformat:"s" %}selected{% endif %}>
@@ -652,33 +667,33 @@
                     <tr data-performance-id="{{ perf.performance_id }}">
                         <td><strong>{{ perf.staff.staff_name_fa }} {{ perf.staff.staff_family_fa }}</strong></td>
                         <td>{{ perf.staff.unit.unit_name_fa|default:"-" }}</td>
-                        <td class="persian-number">{{ perf.year.year_number|default:"-" }}</td>
+                        <td class="year-number">{{ perf.year.year_number|default:"-" }}</td>
                         <td>{{ perf.month.month_name|default:"-" }}</td>
                         <!-- Admin editable fields (11 columns) -->
-                        <td class="persian-number numeric admin-editable" data-field="performance_working_days" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_working_days|default:0 }}">{{ perf.performance_working_days|default:"0" }}</td>
-                        <td class="persian-number numeric duration admin-editable" data-field="performance_hourly_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_overtime|default:'0' }}">{{ perf.performance_hourly_overtime|default:"0" }}</td>
-                        <td class="persian-number numeric duration admin-editable" data-field="performance_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_leave|default:'0' }}">{{ perf.performance_hourly_leave|default:"0" }}</td>
-                        <td class="persian-number numeric duration admin-editable" data-field="performance_hourly_absence" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_absence|default:'0' }}">{{ perf.performance_hourly_absence|default:"0" }}</td>
-                        <td class="persian-number numeric admin-editable" data-field="performance_daily_absence" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_absence|default:0 }}">{{ perf.performance_daily_absence|default:"0" }}</td>
-                        <td class="persian-number numeric admin-editable" data-field="performance_annual_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_annual_leave|default:0 }}">{{ perf.performance_annual_leave|default:"0" }}</td>
-                        <td class="persian-number numeric admin-editable" data-field="performance_sick_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_sick_leave|default:0 }}">{{ perf.performance_sick_leave|default:"0" }}</td>
-                        <td class="persian-number numeric admin-editable" data-field="performance_daily_reward_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_reward_leave|default:0 }}">{{ perf.performance_daily_reward_leave|default:"0" }}</td>
-                        <td class="persian-number numeric admin-editable" data-field="performance_daily_mission" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_mission|default:0 }}">{{ perf.performance_daily_mission|default:"0" }}</td>
+                        <td class="numeric admin-editable" data-field="performance_working_days" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_working_days|default:0 }}">{{ perf.performance_working_days|default:"0" }}</td>
+                        <td class="numeric duration admin-editable" data-field="performance_hourly_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_overtime|default:'0' }}">{{ perf.performance_hourly_overtime|default:"0" }}</td>
+                        <td class="numeric duration admin-editable" data-field="performance_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_leave|default:'0' }}">{{ perf.performance_hourly_leave|default:"0" }}</td>
+                        <td class="numeric duration admin-editable" data-field="performance_hourly_absence" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_absence|default:'0' }}">{{ perf.performance_hourly_absence|default:"0" }}</td>
+                        <td class="numeric admin-editable" data-field="performance_daily_absence" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_absence|default:0 }}">{{ perf.performance_daily_absence|default:"0" }}</td>
+                        <td class="numeric admin-editable" data-field="performance_annual_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_annual_leave|default:0 }}">{{ perf.performance_annual_leave|default:"0" }}</td>
+                        <td class="numeric admin-editable" data-field="performance_sick_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_sick_leave|default:0 }}">{{ perf.performance_sick_leave|default:"0" }}</td>
+                        <td class="numeric admin-editable" data-field="performance_daily_reward_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_reward_leave|default:0 }}">{{ perf.performance_daily_reward_leave|default:"0" }}</td>
+                        <td class="numeric admin-editable" data-field="performance_daily_mission" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_mission|default:0 }}">{{ perf.performance_daily_mission|default:"0" }}</td>
                         <!-- Proposed fields (Head of Unit editable - yellow) -->
-                        <td class="persian-number numeric head-editable" data-field="performance_proposed_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_overtime|default:0 }}">
+                        <td class="numeric head-editable" data-field="performance_proposed_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_overtime|default:0 }}">
                             {{ perf.performance_proposed_overtime|default:"0" }}
                         </td>
-                        <td class="persian-number numeric head-editable" data-field="performance_proposed_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_compensatory_timeoff|default:0 }}">
+                        <td class="numeric head-editable" data-field="performance_proposed_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_compensatory_timeoff|default:0 }}">
                             {{ perf.performance_proposed_compensatory_timeoff|default:"0" }}
                         </td>
                         <!-- Approved fields (Office Manager editable - green) -->
-                        <td class="persian-number numeric duration office-editable" data-field="performance_approved_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_hourly_leave|default:'0' }}">
+                        <td class="numeric duration office-editable" data-field="performance_approved_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_hourly_leave|default:'0' }}">
                             {{ perf.performance_approved_hourly_leave|default:"0" }}
                         </td>
-                        <td class="persian-number numeric office-editable" data-field="performance_approved_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_overtime|default:0 }}">
+                        <td class="numeric office-editable" data-field="performance_approved_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_overtime|default:0 }}">
                             {{ perf.performance_approved_overtime|default:"0" }}
                         </td>
-                        <td class="persian-number numeric office-editable" data-field="performance_approved_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_compensatory_timeoff|default:0 }}">
+                        <td class="numeric office-editable" data-field="performance_approved_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_compensatory_timeoff|default:0 }}">
                             {{ perf.performance_approved_compensatory_timeoff|default:"0" }}
                         </td>
                     </tr>
@@ -687,7 +702,7 @@
                         <td colspan="18" style="text-align: center; padding: 50px;">
                             😊 هیچ رکورد عملکردی یافت نشد
                         </td>
-                    <tr>
+                    </tr>
                     {% endfor %}
                 </tbody>
                 <tfoot id="summaryRow"></tfoot>
@@ -725,6 +740,7 @@
         // ============================================================
         // DATA & UTILITIES
         // ============================================================
+        // Store all staff data for dynamic filtering
         const allStaffData = [
             {% for staff in all_staff_list %}
             { id: '{{ staff.staff_id }}', name: '{{ staff.staff_name_fa }} {{ staff.staff_family_fa }}', unitId: '{{ staff.unit_id }}' },
@@ -749,43 +765,76 @@
             return String(input).replace(/\d/g, d => persianMap[d]);
         }
 
-        // ============================================================
-        // NUMBER CONVERSION
-        // ============================================================
-        function convertAllNumbersToPersian() {
-            // Stats, page, footer numbers
+        // Formatter with comma (for stats, page, footer)
+        const faFormatter = new Intl.NumberFormat('fa-IR');
+        // Formatter without comma (for years)
+        const faFormatterNoComma = new Intl.NumberFormat('fa-IR', { useGrouping: false });
+
+        function convertToPersianNumbers() {
+            // Convert stats numbers (with commas)
             document.querySelectorAll('.stats-number, .page-number, .footer-number').forEach(el => {
                 if (el.innerText && /\d/.test(el.innerText)) {
-                    el.innerText = toPersianNumber(el.innerText);
+                    let num = parseInt(el.innerText.replace(/,/g, ''));
+                    if (!isNaN(num)) {
+                        el.innerText = faFormatter.format(num);
+                    }
                 }
             });
 
-            // Year dropdown
+            // Convert year numbers in dropdown (no commas)
             document.querySelectorAll('#yearFilter option').forEach(el => {
                 if (el.innerText && /\d/.test(el.innerText) && el.innerText !== 'همه سال‌ها') {
-                    el.innerText = toPersianNumber(el.innerText);
+                    let num = parseInt(el.innerText.replace(/,/g, ''));
+                    if (!isNaN(num)) {
+                        el.innerText = faFormatterNoComma.format(num);
+                    }
                 }
             });
 
-            // Pagination numbers
+            // Convert year numbers in table (no commas)
+            document.querySelectorAll('.year-number').forEach(el => {
+                if (el.innerText && /\d/.test(el.innerText) && el.innerText !== '-') {
+                    let num = parseInt(el.innerText.replace(/,/g, ''));
+                    if (!isNaN(num)) {
+                        el.innerText = faFormatterNoComma.format(num);
+                    }
+                }
+            });
+
+            // Convert pagination numbers (keep commas)
             document.querySelectorAll('.pagination a, .pagination span').forEach(el => {
                 if (el.innerText && /\d/.test(el.innerText) && !el.innerText.includes('اول') && !el.innerText.includes('قبلی') && !el.innerText.includes('بعدی') && !el.innerText.includes('آخر')) {
-                    el.innerText = toPersianNumber(el.innerText);
+                    let num = parseInt(el.innerText.replace(/,/g, ''));
+                    if (!isNaN(num)) {
+                        el.innerText = faFormatter.format(num);
+                    }
                 }
             });
 
-            // Table numbers
-            document.querySelectorAll('.persian-number').forEach(el => {
-                if (el.innerText && /\d/.test(el.innerText) && el.innerText !== '-') {
-                    if (el.classList.contains('duration')) {
-                        const parts = el.innerText.split(':');
+            // Convert table body numbers (keep commas for numbers, no commas for years already done)
+            document.querySelectorAll('#performanceTable tbody td').forEach(td => {
+                // Skip year-number cells (already converted)
+                if (td.classList.contains('year-number')) return;
+
+                if (td.innerText && /\d/.test(td.innerText) && td.innerText !== '-') {
+                    if (td.classList.contains('duration') && td.innerText.includes(':')) {
+                        const parts = td.innerText.split(':');
                         if (parts.length === 2) {
-                            el.innerText = toPersianNumber(parts[0]) + ':' + toPersianNumber(parts[1]);
-                        } else {
-                            el.innerText = toPersianNumber(el.innerText);
+                            let hourNum = parseInt(parts[0].replace(/,/g, ''));
+                            let minNum = parseInt(parts[1].replace(/,/g, ''));
+                            if (!isNaN(hourNum) && !isNaN(minNum)) {
+                                td.innerText = faFormatterNoComma.format(hourNum) + ':' + faFormatterNoComma.format(minNum);
+                            }
                         }
                     } else {
-                        el.innerText = toPersianNumber(el.innerText);
+                        let num = parseFloat(td.innerText.replace(/,/g, ''));
+                        if (!isNaN(num)) {
+                            if (Number.isInteger(num)) {
+                                td.innerText = faFormatter.format(num);
+                            } else {
+                                td.innerText = faFormatter.format(num);
+                            }
+                        }
                     }
                 }
             });
@@ -794,16 +843,19 @@
         // ============================================================
         // DYNAMIC STAFF FILTER (Admin and Office Manager)
         // ============================================================
-        function filterStaffByUnit() {
+        function updateStaffDropdown() {
             const userPosition = {{ user_position|default:0 }};
-            // Apply for Admin (1) and Office Manager (2)
+            // Only apply for Admin (1) and Office Manager (2)
             if (userPosition !== 1 && userPosition !== 2) return;
 
             const selectedUnit = document.getElementById('unitFilter').value;
             const staffSelect = document.getElementById('staffFilter');
-            const currentSelectedValue = staffSelect.value;
+            const currentStaffValue = staffSelect.value;
 
+            // Clear and rebuild staff dropdown
             staffSelect.innerHTML = '<option value="">همه پرسنل</option>';
+
+            // Filter staff based on selected unit
             const filteredStaff = selectedUnit === '' ? allStaffData : allStaffData.filter(s => s.unitId === selectedUnit);
 
             filteredStaff.forEach(staff => {
@@ -813,8 +865,9 @@
                 staffSelect.appendChild(option);
             });
 
-            if (currentSelectedValue && filteredStaff.some(s => s.id === currentSelectedValue)) {
-                staffSelect.value = currentSelectedValue;
+            // Restore previously selected value if it exists in filtered list
+            if (currentStaffValue && filteredStaff.some(s => s.id === currentStaffValue)) {
+                staffSelect.value = currentStaffValue;
             }
         }
 
@@ -897,7 +950,7 @@
 
             document.getElementById('summaryRow').innerHTML = `<tr class="summary-row">${summaryCells.join('')}</tr>`;
 
-            // Apply Persian numbers to summary row
+            // Convert summary row numbers to Persian
             document.querySelectorAll('#summaryRow td').forEach(td => {
                 if (td.innerText && /\d/.test(td.innerText)) {
                     if (td.innerText.includes(':')) {
@@ -996,6 +1049,7 @@
                                     this.innerText = toPersianNumber(newValue || '0');
                                     showToast('✓ ذخیره شد', 'success');
                                     calculateSummary();
+                                    convertToPersianNumbers();
                                 } else {
                                     this.innerText = currentValue;
                                     showToast('❌ خطا: ' + (data.error || 'مجوز ویرایش ندارید'), 'error');
@@ -1043,6 +1097,7 @@
                                     this.innerText = toPersianNumber(newValue || '0');
                                     showToast('✓ ذخیره شد', 'success');
                                     calculateSummary();
+                                    convertToPersianNumbers();
                                 } else {
                                     this.innerText = currentValue;
                                     showToast('❌ خطا: ' + (data.error || 'مجوز ویرایش ندارید'), 'error');
@@ -1090,6 +1145,7 @@
                                     this.innerText = toPersianNumber(newValue || '0');
                                     showToast('✓ ذخیره شد', 'success');
                                     calculateSummary();
+                                    convertToPersianNumbers();
                                 } else {
                                     this.innerText = currentValue;
                                     showToast('❌ خطا: ' + (data.error || 'مجوز ویرایش ندارید'), 'error');
@@ -1111,9 +1167,10 @@
         // INITIALIZATION
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
-            convertAllNumbersToPersian();
+            convertToPersianNumbers();
             makeEditable();
             calculateSummary();
+            updateStaffDropdown(); // Initialize staff dropdown based on selected unit
             document.getElementById('summaryType').addEventListener('change', () => calculateSummary());
         });
     </script>

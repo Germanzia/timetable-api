@@ -41,6 +41,8 @@ urlpatterns = [
     path('import-performance/', views.import_performance_page, name='import_performance'),
     path('update-performance/', views.update_performance_field, name='update_performance'),
     path('debug-user/', views.debug_user, name='debug_user'),
+    path('change-password/', views.change_password_page, name='change_password'),
+    path('change-password-api/', views.change_password_api, name='change_password_api'),
     # Include all API router endpoints
     path('', include(router.urls)),
 ]
