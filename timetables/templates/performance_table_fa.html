@@ -46,7 +46,7 @@
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 100%;
             margin: 0 auto;
             background: #F5F5F5;
             border-radius: 20px;
@@ -236,59 +236,66 @@
 
         .table-wrapper {
             overflow-x: auto;
+            overflow-y: visible;
             padding: 0;
             max-width: 100%;
             background: #F5F5F5;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+            border-collapse: collapse;
             font-size: 12px;
-            min-width: 1400px;
+            min-width: 1850px;
         }
 
         th {
             background: linear-gradient(135deg, #303841 0%, #76ABAE 100%);
             color: #F5F5F5;
-            padding: 14px 10px;
-            text-align: right;
+            padding: 14px 6px;
             position: sticky;
             top: 0;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 11px;
             border-bottom: 2px solid #FF5722;
+            white-space: nowrap;
+            text-align: center;
         }
 
         td {
-            padding: 10px 10px;
+            padding: 10px 6px;
             border-bottom: 1px solid #e0e0e0;
-            text-align: right;
+            text-align: center;
             font-size: 11px;
             background-color: #F5F5F5;
             color: #303841;
+            white-space: nowrap;
         }
 
-        /* Column Widths */
-        th:nth-child(1), td:nth-child(1) { min-width: 160px; max-width: 200px; white-space: nowrap; }
-        th:nth-child(2), td:nth-child(2) { min-width: 120px; }
-        th:nth-child(3), td:nth-child(3) { min-width: 60px; }
-        th:nth-child(4), td:nth-child(4) { min-width: 80px; }
-        th:nth-child(5), td:nth-child(5) { min-width: 70px; }
-        th:nth-child(6), td:nth-child(6) { min-width: 90px; }
-        th:nth-child(7), td:nth-child(7) { min-width: 90px; }
-        th:nth-child(8), td:nth-child(8) { min-width: 80px; }
-        th:nth-child(9), td:nth-child(9) { min-width: 80px; }
-        th:nth-child(10), td:nth-child(10) { min-width: 85px; }
-        th:nth-child(11), td:nth-child(11) { min-width: 85px; }
-        th:nth-child(12), td:nth-child(12) { min-width: 85px; }
-        th:nth-child(13), td:nth-child(13) { min-width: 85px; }
-        th:nth-child(14), td:nth-child(14) { min-width: 110px; }
-        th:nth-child(15), td:nth-child(15) { min-width: 100px; }
-        th:nth-child(16), td:nth-child(16) { min-width: 110px; }
-        th:nth-child(17), td:nth-child(17) { min-width: 100px; }
-        th:nth-child(18), td:nth-child(18) { min-width: 100px; }
+        /* Fixed column widths */
+        th:nth-child(1), td:nth-child(1) { width: 150px; min-width: 150px; }
+        th:nth-child(2), td:nth-child(2) { width: 110px; min-width: 110px; }
+        th:nth-child(3), td:nth-child(3) { width: 60px; min-width: 60px; }
+        th:nth-child(4), td:nth-child(4) { width: 70px; min-width: 70px; }
+        th:nth-child(5), td:nth-child(5) { width: 70px; min-width: 70px; }
+        th:nth-child(6), td:nth-child(6) { width: 90px; min-width: 90px; }
+        th:nth-child(7), td:nth-child(7) { width: 90px; min-width: 90px; }
+        th:nth-child(8), td:nth-child(8) { width: 80px; min-width: 80px; }
+        th:nth-child(9), td:nth-child(9) { width: 80px; min-width: 80px; }
+        th:nth-child(10), td:nth-child(10) { width: 85px; min-width: 85px; }
+        th:nth-child(11), td:nth-child(11) { width: 85px; min-width: 85px; }
+        th:nth-child(12), td:nth-child(12) { width: 85px; min-width: 85px; }
+        th:nth-child(13), td:nth-child(13) { width: 85px; min-width: 85px; }
+        th:nth-child(14), td:nth-child(14) { width: 110px; min-width: 110px; }
+        th:nth-child(15), td:nth-child(15) { width: 100px; min-width: 100px; }
+        th:nth-child(16), td:nth-child(16) { width: 110px; min-width: 110px; }
+        th:nth-child(17), td:nth-child(17) { width: 100px; min-width: 100px; }
+        th:nth-child(18), td:nth-child(18) { width: 100px; min-width: 100px; }
+
+        th:first-child, td:first-child {
+            text-align: right;
+        }
 
         tbody tr:hover td {
             background: #e8e8e8;
@@ -471,8 +478,8 @@
         </div>
 
         <div class="stats">
-            <span>📈 تعداد کل رکوردها: <strong class="persian-number">{{ performances.paginator.count }}</strong></span>
-            <span>📄 نمایش: <strong class="persian-number">{{ performances.start_index }}</strong> - <strong class="persian-number">{{ performances.end_index }}</strong> از <strong class="persian-number">{{ performances.paginator.count }}</strong></span>
+            <span>📈 تعداد کل رکوردها: <strong class="stats-number">{{ performances.paginator.count }}</strong></span>
+            <span>📄 نمایش: <strong class="stats-number">{{ performances.start_index }}</strong> - <strong class="stats-number">{{ performances.end_index }}</strong> از <strong class="stats-number">{{ performances.paginator.count }}</strong></span>
         </div>
 
         <div class="filters">
@@ -506,7 +513,7 @@
                     <option value="">همه سال‌ها</option>
                     {% for year in year_list %}
                     <option value="{{ year.year_id }}" {% if selected_year == year.year_id|stringformat:"s" %}selected{% endif %}>
-                        <span class="year-number">{{ year.year_number }}</span>
+                        {{ year.year_number }}
                     </option>
                     {% endfor %}
                 </select>
@@ -569,30 +576,30 @@
                         <td>{{ perf.staff.unit.unit_name_fa|default:"-" }}</td>
                         <td class="persian-number">{{ perf.year.year_number|default:"-" }}</td>
                         <td>{{ perf.month.month_name|default:"-" }}</td>
-                        <td class="persian-number numeric summary-number" data-raw="{{ perf.performance_working_days|default:0 }}">{{ perf.performance_working_days|default:"0" }}</td>
-                        <td class="persian-number numeric duration summary-duration" data-raw="{{ perf.performance_hourly_overtime|default:'0' }}">{{ perf.performance_hourly_overtime|default:"0" }}</td>
-                        <td class="persian-number numeric duration summary-duration" data-raw="{{ perf.performance_hourly_leave|default:'0' }}">{{ perf.performance_hourly_leave|default:"0" }}</td>
-                        <td class="persian-number numeric duration summary-duration" data-raw="{{ perf.performance_hourly_absence|default:'0' }}">{{ perf.performance_hourly_absence|default:"0" }}</td>
-                        <td class="persian-number numeric summary-number" data-raw="{{ perf.performance_daily_absence|default:0 }}">{{ perf.performance_daily_absence|default:"0" }}</td>
-                        <td class="persian-number numeric summary-number" data-raw="{{ perf.performance_annual_leave|default:0 }}">{{ perf.performance_annual_leave|default:"0" }}</td>
-                        <td class="persian-number numeric summary-number" data-raw="{{ perf.performance_sick_leave|default:0 }}">{{ perf.performance_sick_leave|default:"0" }}</td>
-                        <td class="persian-number numeric summary-number" data-raw="{{ perf.performance_daily_reward_leave|default:0 }}">{{ perf.performance_daily_reward_leave|default:"0" }}</td>
-                        <td class="persian-number numeric summary-number" data-raw="{{ perf.performance_daily_mission|default:0 }}">{{ perf.performance_daily_mission|default:"0" }}</td>
+                        <td class="persian-number numeric" data-raw="{{ perf.performance_working_days|default:0 }}">{{ perf.performance_working_days|default:"0" }}</td>
+                        <td class="persian-number numeric duration" data-raw="{{ perf.performance_hourly_overtime|default:'0' }}">{{ perf.performance_hourly_overtime|default:"0" }}</td>
+                        <td class="persian-number numeric duration" data-raw="{{ perf.performance_hourly_leave|default:'0' }}">{{ perf.performance_hourly_leave|default:"0" }}</td>
+                        <td class="persian-number numeric duration" data-raw="{{ perf.performance_hourly_absence|default:'0' }}">{{ perf.performance_hourly_absence|default:"0" }}</td>
+                        <td class="persian-number numeric" data-raw="{{ perf.performance_daily_absence|default:0 }}">{{ perf.performance_daily_absence|default:"0" }}</td>
+                        <td class="persian-number numeric" data-raw="{{ perf.performance_annual_leave|default:0 }}">{{ perf.performance_annual_leave|default:"0" }}</td>
+                        <td class="persian-number numeric" data-raw="{{ perf.performance_sick_leave|default:0 }}">{{ perf.performance_sick_leave|default:"0" }}</td>
+                        <td class="persian-number numeric" data-raw="{{ perf.performance_daily_reward_leave|default:0 }}">{{ perf.performance_daily_reward_leave|default:"0" }}</td>
+                        <td class="persian-number numeric" data-raw="{{ perf.performance_daily_mission|default:0 }}">{{ perf.performance_daily_mission|default:"0" }}</td>
 
-                        <td class="persian-number numeric head-editable summary-number" data-field="performance_proposed_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_overtime|default:0 }}">
+                        <td class="persian-number numeric head-editable" data-field="performance_proposed_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_overtime|default:0 }}">
                             {{ perf.performance_proposed_overtime|default:"0" }}
                         </td>
-                        <td class="persian-number numeric head-editable summary-number" data-field="performance_proposed_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_compensatory_timeoff|default:0 }}">
+                        <td class="persian-number numeric head-editable" data-field="performance_proposed_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_compensatory_timeoff|default:0 }}">
                             {{ perf.performance_proposed_compensatory_timeoff|default:"0" }}
                         </td>
 
-                        <td class="persian-number numeric duration office-editable summary-duration" data-field="performance_approved_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_hourly_leave|default:'0' }}">
+                        <td class="persian-number numeric duration office-editable" data-field="performance_approved_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_hourly_leave|default:'0' }}">
                             {{ perf.performance_approved_hourly_leave|default:"0" }}
                         </td>
-                        <td class="persian-number numeric office-editable summary-number" data-field="performance_approved_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_overtime|default:0 }}">
+                        <td class="persian-number numeric office-editable" data-field="performance_approved_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_overtime|default:0 }}">
                             {{ perf.performance_approved_overtime|default:"0" }}
                         </td>
-                        <td class="persian-number numeric office-editable summary-number" data-field="performance_approved_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_compensatory_timeoff|default:0 }}">
+                        <td class="persian-number numeric office-editable" data-field="performance_approved_compensatory_timeoff" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_approved_compensatory_timeoff|default:0 }}">
                             {{ perf.performance_approved_compensatory_timeoff|default:"0" }}
                         </td>
                     </tr>
@@ -610,30 +617,38 @@
         </div>
 
         <div class="pagination">
-            {% if performances.has_previous %}
-                <a href="?page=1{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">اول</a>
-                <a href="?page={{ performances.previous_page_number }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">قبلی</a>
-            {% endif %}
+            <span class="step-links">
+                {% if performances.has_previous %}
+                    <a href="?page=1{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">اول</a>
+                    <a href="?page={{ performances.previous_page_number }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">قبلی</a>
+                {% endif %}
 
-            <span class="current">
-                صفحه <span class="persian-number">{{ performances.number }}</span> از <span class="persian-number">{{ performances.paginator.num_pages }}</span>
+                <span class="current">
+                    صفحه <span class="page-number">{{ performances.number }}</span> از <span class="page-number">{{ performances.paginator.num_pages }}</span>
+                </span>
+
+                {% if performances.has_next %}
+                    <a href="?page={{ performances.next_page_number }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">بعدی</a>
+                    <a href="?page={{ performances.paginator.num_pages }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">آخر</a>
+                {% endif %}
             </span>
-
-            {% if performances.has_next %}
-                <a href="?page={{ performances.next_page_number }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">بعدی</a>
-                <a href="?page={{ performances.paginator.num_pages }}{% if selected_unit %}&unit={{ selected_unit }}{% endif %}{% if selected_staff %}&staff={{ selected_staff }}{% endif %}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if selected_month %}&month={{ selected_month }}{% endif %}">آخر</a>
-            {% endif %}
         </div>
 
         <div class="footer">
-            <p>© ۱۴۰۵ سیستم زمانبندی کارکنان | کل رکوردها: <span class="persian-number">{{ performances.paginator.count }}</span></p>
+            <p>© ۱۴۰۵ سیستم زمانبندی کارکنان | کل رکوردها: <span class="footer-number">{{ performances.paginator.count }}</span></p>
         </div>
     </div>
 
     <div id="toast-notification"></div>
 
     <script>
-        // Convert Persian numbers to English
+        // Get all staff data with their unit IDs for dynamic filtering
+        const allStaffData = [
+            {% for staff in all_staff_list %}
+            { id: '{{ staff.staff_id }}', name: '{{ staff.staff_name_fa }} {{ staff.staff_family_fa }}', unitId: '{{ staff.unit_id }}' },
+            {% endfor %}
+        ];
+
         function toEnglishNumber(input) {
             if (!input && input !== 0) return input;
             const persianMap = {
@@ -645,7 +660,6 @@
             });
         }
 
-        // Convert English numbers to Persian
         function toPersianNumber(input) {
             if (!input && input !== 0) return input;
             const persianMap = {
@@ -657,12 +671,74 @@
             });
         }
 
-        // Parse duration (HH:MM) to total minutes
+        function filterStaffByUnit() {
+            const userPosition = {{ user_position|default:0 }};
+            // Only apply for Office Manager (position_id=2)
+            if (userPosition !== 2) return;
+
+            const selectedUnit = document.getElementById('unitFilter').value;
+            const staffSelect = document.getElementById('staffFilter');
+            const currentSelectedValue = staffSelect.value;
+
+            // Clear existing options
+            staffSelect.innerHTML = '<option value="">همه پرسنل</option>';
+
+            // Filter and add staff based on selected unit
+            const filteredStaff = selectedUnit === ''
+                ? allStaffData
+                : allStaffData.filter(staff => staff.unitId === selectedUnit);
+
+            filteredStaff.forEach(staff => {
+                const option = document.createElement('option');
+                option.value = staff.id;
+                option.textContent = staff.name;
+                staffSelect.appendChild(option);
+            });
+
+            // Restore previously selected value if still valid
+            if (currentSelectedValue && filteredStaff.some(s => s.id === currentSelectedValue)) {
+                staffSelect.value = currentSelectedValue;
+            }
+        }
+
+        function convertAllNumbersToPersian() {
+            document.querySelectorAll('.stats-number, .page-number, .footer-number').forEach(el => {
+                if (el.innerText && /\d/.test(el.innerText)) {
+                    el.innerText = toPersianNumber(el.innerText);
+                }
+            });
+
+            document.querySelectorAll('#yearFilter option').forEach(el => {
+                if (el.innerText && /\d/.test(el.innerText) && el.innerText !== 'همه سال‌ها') {
+                    el.innerText = toPersianNumber(el.innerText);
+                }
+            });
+
+            document.querySelectorAll('.pagination a, .pagination span').forEach(el => {
+                if (el.innerText && /\d/.test(el.innerText) && !el.innerText.includes('اول') && !el.innerText.includes('قبلی') && !el.innerText.includes('بعدی') && !el.innerText.includes('آخر')) {
+                    el.innerText = toPersianNumber(el.innerText);
+                }
+            });
+
+            document.querySelectorAll('.persian-number').forEach(el => {
+                if (el.innerText && /\d/.test(el.innerText) && el.innerText !== '-') {
+                    if (el.classList.contains('duration')) {
+                        const parts = el.innerText.split(':');
+                        if (parts.length === 2) {
+                            el.innerText = toPersianNumber(parts[0]) + ':' + toPersianNumber(parts[1]);
+                        } else {
+                            el.innerText = toPersianNumber(el.innerText);
+                        }
+                    } else {
+                        el.innerText = toPersianNumber(el.innerText);
+                    }
+                }
+            });
+        }
+
         function parseDuration(durationStr) {
             if (!durationStr || durationStr === '0' || durationStr === '-' || durationStr === '') return 0;
-
             let englishStr = toEnglishNumber(durationStr);
-
             if (englishStr.includes(':')) {
                 const parts = englishStr.split(':');
                 if (parts.length >= 2) {
@@ -675,92 +751,11 @@
             return isNaN(num) ? 0 : num;
         }
 
-        // Format minutes back to HH:MM
         function formatDuration(totalMinutes) {
             if (totalMinutes === 0) return '۰:۰۰';
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
             return toPersianNumber(hours.toString()) + ':' + toPersianNumber(minutes.toString().padStart(2, '0'));
-        }
-
-        // Convert year numbers to Persian in dropdown
-        function convertYearNumbersToPersian() {
-            const yearOptions = document.querySelectorAll('#yearFilter option');
-            yearOptions.forEach(option => {
-                const value = option.value;
-                if (value && !isNaN(parseInt(value))) {
-                    const persianYear = toPersianNumber(value);
-                    option.innerHTML = persianYear;
-                }
-            });
-        }
-
-        // Dynamic staff filter based on selected unit (for Office Manager)
-        let allStaffData = [];
-
-        function loadAllStaffData() {
-            // Get all staff options from the current dropdown
-            const staffSelect = document.getElementById('staffFilter');
-            const options = staffSelect.querySelectorAll('option');
-            allStaffData = [];
-            options.forEach(option => {
-                const value = option.value;
-                const text = option.innerText;
-                // Extract staff unit from data attribute or use the text
-                allStaffData.push({
-                    value: value,
-                    text: text,
-                    unit: option.getAttribute('data-unit') || ''
-                });
-            });
-        }
-
-        function filterStaffByUnit() {
-            const userPosition = {{ user_position|default:0 }};
-            // Only apply dynamic filtering for Office Manager (position_id=2)
-            if (userPosition !== 2) return;
-
-            const selectedUnit = document.getElementById('unitFilter').value;
-            const staffSelect = document.getElementById('staffFilter');
-            const currentStaffValue = staffSelect.value;
-
-            // Get staff data from Django context
-            const staffList = [
-                { staff_id: '', staff_name_fa: 'همه پرسنل', staff_family_fa: '', unit_id: '' },
-                {% for staff in all_staff_list %}
-                { staff_id: '{{ staff.staff_id }}', staff_name_fa: '{{ staff.staff_name_fa }}', staff_family_fa: '{{ staff.staff_family_fa }}', unit_id: '{{ staff.unit_id }}' },
-                {% endfor %}
-            ];
-
-            // Clear and rebuild staff dropdown
-            staffSelect.innerHTML = '';
-
-            // Add "All Staff" option
-            const allOption = document.createElement('option');
-            allOption.value = '';
-            allOption.textContent = 'همه پرسنل';
-            staffSelect.appendChild(allOption);
-
-            // Filter and add staff based on selected unit
-            let filteredStaff = staffList;
-            if (selectedUnit) {
-                filteredStaff = staffList.filter(staff => staff.unit_id == selectedUnit);
-            }
-
-            filteredStaff.forEach(staff => {
-                if (staff.staff_id) {
-                    const option = document.createElement('option');
-                    option.value = staff.staff_id;
-                    option.textContent = `${staff.staff_name_fa} ${staff.staff_family_fa}`.trim();
-                    option.setAttribute('data-unit', staff.unit_id);
-                    staffSelect.appendChild(option);
-                }
-            });
-
-            // Restore previously selected value if it exists in new list
-            if (currentStaffValue && Array.from(staffSelect.options).some(opt => opt.value == currentStaffValue)) {
-                staffSelect.value = currentStaffValue;
-            }
         }
 
         function calculateSummary() {
@@ -775,7 +770,7 @@
 
             let numberSums = new Array(18).fill(0);
             let durationSums = new Array(18).fill(0);
-            let count = dataRows.length;
+            const count = dataRows.length;
 
             dataRows.forEach(row => {
                 for (let col = 4; col <= 17; col++) {
@@ -784,13 +779,10 @@
                         const rawValue = cell.getAttribute('data-raw');
                         if (rawValue !== null && rawValue !== undefined) {
                             if (cell.classList.contains('duration')) {
-                                const minutes = parseDuration(rawValue);
-                                durationSums[col] += minutes;
+                                durationSums[col] += parseDuration(rawValue);
                             } else {
                                 const numValue = parseFloat(toEnglishNumber(rawValue));
-                                if (!isNaN(numValue)) {
-                                    numberSums[col] += numValue;
-                                }
+                                if (!isNaN(numValue)) numberSums[col] += numValue;
                             }
                         }
                     }
@@ -804,38 +796,32 @@
             summaryCells.push('<td style="background: #5a8a8d;">-</td>');
 
             for (let col = 4; col <= 17; col++) {
-                const firstCell = dataRows[0]?.cells[col];
-                const isDuration = firstCell?.classList.contains('duration');
+                const firstRow = dataRows[0];
+                const isDuration = firstRow?.cells[col]?.classList.contains('duration');
 
                 if (isDuration) {
-                    let totalMinutes = durationSums[col];
-                    let value = summaryType === 'sum' ? totalMinutes : totalMinutes / count;
+                    let value = summaryType === 'sum' ? durationSums[col] : durationSums[col] / count;
                     let formatted = formatDuration(Math.round(value));
-                    summaryCells.push(`<td class="persian-number summary-duration">${formatted}</td>`);
+                    summaryCells.push(`<td style="text-align: center;">${formatted}</td>`);
                 } else {
-                    let total = numberSums[col];
-                    let value = summaryType === 'sum' ? total : total / count;
+                    let value = summaryType === 'sum' ? numberSums[col] : numberSums[col] / count;
                     let rounded = Math.round(value * 10) / 10;
-                    summaryCells.push(`<td class="persian-number summary-number">${toPersianNumber(rounded.toString())}</td>`);
+                    summaryCells.push(`<td style="text-align: center;">${toPersianNumber(rounded.toString())}</td>`);
                 }
             }
 
             document.getElementById('summaryRow').innerHTML = `<tr class="summary-row">${summaryCells.join('')}</tr>`;
-        }
 
-        function convertNumbersToPersian() {
-            document.querySelectorAll('.persian-number').forEach(el => {
-                if (el.innerText && /\d/.test(el.innerText) && el.innerText !== '-' && !el.closest('#summaryRow')) {
-                    if (el.classList.contains('duration')) {
-                        const parts = el.innerText.split(':');
+            // Apply Persian numbers to summary row
+            document.querySelectorAll('#summaryRow td').forEach(td => {
+                if (td.innerText && /\d/.test(td.innerText)) {
+                    if (td.innerText.includes(':')) {
+                        const parts = td.innerText.split(':');
                         if (parts.length === 2) {
-                            const persianParts = parts.map(p => toPersianNumber(p));
-                            el.innerText = persianParts.join(':');
-                        } else {
-                            el.innerText = toPersianNumber(el.innerText);
+                            td.innerText = toPersianNumber(parts[0]) + ':' + toPersianNumber(parts[1]);
                         }
                     } else {
-                        el.innerText = toPersianNumber(el.innerText);
+                        td.innerText = toPersianNumber(td.innerText);
                     }
                 }
             });
@@ -993,8 +979,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            convertNumbersToPersian();
-            convertYearNumbersToPersian();
+            convertAllNumbersToPersian();
             makeEditable();
             calculateSummary();
             document.getElementById('summaryType').addEventListener('change', () => calculateSummary());
