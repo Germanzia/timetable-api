@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Vazir', 'BMitra', 'BYekan', 'Tahoma', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #303841 0%, #1a1f24 100%);
+            background: white;
             min-height: 100vh;
             padding: 30px;
             position: relative;
@@ -31,7 +31,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 30% 40%, rgba(118, 171, 174, 0.08) 0%, transparent 70%);
+            background: radial-gradient(circle at 30% 40%, rgba(175, 211, 226, 0.15) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -56,15 +56,15 @@
         .container {
             max-width: 100%;
             margin: 0 auto;
-            background: #F5F5F5;
+            background: #F6F1F1;
             border-radius: 20px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #303841 0%, #76ABAE 100%);
-            color: #F5F5F5;
+            background: linear-gradient(135deg, #146C94 0%, #19A7CE 100%);
+            color: #F6F1F1;
             padding: 28px;
             text-align: center;
             position: relative;
@@ -78,7 +78,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 87, 34, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(175, 211, 226, 0.2) 0%, transparent 70%);
             animation: gentleDrift 12s ease-in-out infinite;
         }
 
@@ -105,21 +105,21 @@
            USER INFO BAR
         ============================================================ */
         .user-info {
-            background: #76ABAE;
+            background: #AFD3E2;
             padding: 10px 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 13px;
             font-weight: 500;
-            color: #F5F5F5;
-            border-bottom: 1px solid rgba(48, 56, 65, 0.1);
+            color: #146C94;
+            border-bottom: 1px solid rgba(21, 108, 148, 0.1);
         }
 
         .user-info a {
-            color: #F5F5F5;
+            color: #146C94;
             text-decoration: none;
-            background: rgba(48, 56, 65, 0.3);
+            background: rgba(21, 108, 148, 0.1);
             padding: 4px 12px;
             border-radius: 20px;
             transition: all 0.2s ease;
@@ -128,7 +128,7 @@
         }
 
         .user-info a:hover {
-            background: rgba(48, 56, 65, 0.5);
+            background: rgba(21, 108, 148, 0.2);
             transform: translateY(-1px);
         }
 
@@ -139,7 +139,7 @@
         }
 
         .user-info span:last-child {
-            background: rgba(48, 56, 65, 0.3);
+            background: rgba(21, 108, 148, 0.1);
             padding: 4px 14px;
             border-radius: 20px;
         }
@@ -149,13 +149,13 @@
         ============================================================ */
         .stats {
             padding: 14px 28px;
-            background: #76ABAE;
+            background: #AFD3E2;
             display: flex;
             justify-content: space-between;
             font-weight: 500;
-            color: #F5F5F5;
+            color: #146C94;
             font-size: 13px;
-            border-bottom: 1px solid rgba(48, 56, 65, 0.1);
+            border-bottom: 1px solid rgba(21, 108, 148, 0.1);
         }
 
         .stats span {
@@ -165,9 +165,9 @@
         }
 
         .stats strong {
-            color: #FF5722;
+            color: #F6F1F1;
             font-weight: 700;
-            background: #F5F5F5;
+            background: #146C94;
             padding: 2px 10px;
             border-radius: 20px;
         }
@@ -177,7 +177,7 @@
         ============================================================ */
         .filters {
             padding: 20px 28px;
-            background: #F5F5F5;
+            background: #F6F1F1;
             border-bottom: 1px solid #e0e0e0;
             display: flex;
             flex-wrap: wrap;
@@ -185,21 +185,16 @@
             align-items: flex-end;
         }
 
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
-
         .filter-group label {
             font-size: 11px;
-            color: #303841;
+            color: #146C94;
             margin-bottom: 5px;
             font-weight: 700;
         }
 
         .filter-group select {
             padding: 8px 12px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #AFD3E2;
             border-radius: 10px;
             font-size: 13px;
             cursor: pointer;
@@ -209,7 +204,7 @@
         }
 
         .filter-group select:hover {
-            border-color: #76ABAE;
+            border-color: #19A7CE;
         }
 
         .button-group {
@@ -230,23 +225,23 @@
         }
 
         .btn-apply {
-            background: linear-gradient(135deg, #76ABAE 0%, #5a8a8d 100%);
+            background: #1ea8cf;
             color: white;
         }
 
         .btn-apply:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(118, 171, 174, 0.4);
+            box-shadow: 0 4px 10px rgba(25, 167, 206, 0.4);
         }
 
         .btn-reset {
-            background: linear-gradient(135deg, #FF5722 0%, #e04e1e 100%);
+            background: #1ea8cf;
             color: white;
         }
 
         .btn-reset:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.4);
+            box-shadow: 0 4px 10px rgba(175, 211, 226, 0.4);
         }
 
         /* ============================================================
@@ -254,23 +249,23 @@
         ============================================================ */
         .summary-controls {
             padding: 12px 28px;
-            background: #e8e8e8;
+            background: #AFD3E2;
             display: flex;
             justify-content: flex-end;
             gap: 15px;
-            border-bottom: 1px solid #d0d0d0;
+            border-bottom: 1px solid rgba(21, 108, 148, 0.1);
         }
 
         .summary-controls label {
             font-size: 12px;
-            color: #303841;
+            color: #146C94;
             font-weight: 600;
         }
 
         .summary-controls select {
             padding: 5px 10px;
             border-radius: 8px;
-            border: 1px solid #76ABAE;
+            border: 1px solid #19A7CE;
             font-family: inherit;
             font-size: 12px;
             background: white;
@@ -284,7 +279,7 @@
             overflow-y: visible;
             padding: 0;
             max-width: 100%;
-            background: #F5F5F5;
+            background: #F6F1F1;
             -webkit-overflow-scrolling: touch;
         }
 
@@ -296,14 +291,14 @@
         }
 
         th {
-            background: linear-gradient(135deg, #303841 0%, #76ABAE 100%);
-            color: #F5F5F5;
+            background: #1aa7ce;
+            color: #F6F1F1;
             padding: 14px 6px;
             position: sticky;
             top: 0;
             font-weight: 600;
             font-size: 11px;
-            border-bottom: 2px solid #FF5722;
+            border-bottom: 2px solid #AFD3E2;
             white-space: nowrap;
             text-align: center;
         }
@@ -313,8 +308,8 @@
             border-bottom: 1px solid #e0e0e0;
             text-align: center;
             font-size: 11px;
-            background-color: #F5F5F5;
-            color: #303841;
+            background-color: #F6F1F1;
+            color: #146C94;
             white-space: nowrap;
         }
 
@@ -340,29 +335,36 @@
 
         tbody tr:hover td {
             background: #e8e8e8;
-            border-bottom-color: #76ABAE;
-        }
-
-        /* ============================================================
-           SUMMARY ROW
-        ============================================================ */
-        .summary-row td {
-            background: #76ABAE !important;
-            color: #F5F5F5 !important;
-            font-weight: 700 !important;
-            font-size: 12px !important;
-            border-top: 2px solid #FF5722;
-            border-bottom: none;
-        }
-
-        .summary-row td:first-child {
-            background: #303841 !important;
-            font-weight: 800 !important;
+            border-bottom-color: #19A7CE;
         }
 
         /* ============================================================
            EDITABLE CELLS
         ============================================================ */
+        /* Admin editable cells (blue background) */
+        .admin-editable {
+            background-color: #E8F4F8 !important;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .admin-editable:hover {
+            background-color: #D0E8F0 !important;
+            box-shadow: inset 0 0 0 2px #19A7CE;
+        }
+
+        .admin-editable::after {
+            content: '✎';
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.7;
+            font-size: 11px;
+            color: #146C94;
+        }
+
+        /* Head of Unit editable cells (yellow) */
         .head-editable {
             background-color: #FFF8E0 !important;
             cursor: pointer;
@@ -371,7 +373,7 @@
 
         .head-editable:hover {
             background-color: #FFF0C8 !important;
-            box-shadow: inset 0 0 0 2px #76ABAE;
+            box-shadow: inset 0 0 0 2px #19A7CE;
         }
 
         .head-editable::after {
@@ -382,9 +384,10 @@
             transform: translateY(-50%);
             opacity: 0.7;
             font-size: 11px;
-            color: #FF5722;
+            color: #146C94;
         }
 
+        /* Office Manager editable cells (green) */
         .office-editable {
             background-color: #E8F5E9 !important;
             cursor: pointer;
@@ -393,7 +396,7 @@
 
         .office-editable:hover {
             background-color: #C8E6C9 !important;
-            box-shadow: inset 0 0 0 2px #76ABAE;
+            box-shadow: inset 0 0 0 2px #19A7CE;
         }
 
         .office-editable::after {
@@ -404,7 +407,24 @@
             transform: translateY(-50%);
             opacity: 0.7;
             font-size: 11px;
-            color: #4CAF50;
+            color: #146C94;
+        }
+
+        /* ============================================================
+           SUMMARY ROW
+        ============================================================ */
+        .summary-row td {
+            background: #19A7CE !important;
+            color: #F6F1F1 !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            border-top: 2px solid #AFD3E2;
+            border-bottom: none;
+        }
+
+        .summary-row td:first-child {
+            background: #1aa7ce !important;
+            font-weight: 800 !important;
         }
 
         /* ============================================================
@@ -413,8 +433,8 @@
         .pagination {
             padding: 18px 28px;
             text-align: center;
-            background: #76ABAE;
-            border-top: 1px solid rgba(48, 56, 65, 0.1);
+            background: #AFD3E2;
+            border-top: 1px solid rgba(21, 108, 148, 0.1);
         }
 
         .pagination a, .pagination span {
@@ -429,20 +449,20 @@
         }
 
         .pagination a {
-            background: #F5F5F5;
-            color: #303841;
+            background: #F6F1F1;
+            color: #146C94;
             border: 1px solid #ddd;
         }
 
         .pagination a:hover {
-            background: #FF5722;
-            color: #F5F5F5;
+            background: #19A7CE;
+            color: #F6F1F1;
             transform: translateY(-2px);
         }
 
         .pagination .current {
-            background: linear-gradient(135deg, #303841 0%, #76ABAE 100%);
-            color: #F5F5F5;
+            background: #1aa7ce;
+            color: #F6F1F1;
             border: none;
         }
 
@@ -452,8 +472,8 @@
         .footer {
             padding: 16px;
             text-align: center;
-            background: #303841;
-            color: #76ABAE;
+            background: #146C94;
+            color: #AFD3E2;
             font-size: 12px;
             font-weight: 500;
         }
@@ -473,15 +493,15 @@
             height: 8px;
         }
         .table-wrapper::-webkit-scrollbar-track {
-            background: #e0e0e0;
+            background: #AFD3E2;
             border-radius: 10px;
         }
         .table-wrapper::-webkit-scrollbar-thumb {
-            background: #76ABAE;
+            background: #146C94;
             border-radius: 10px;
         }
         .table-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #FF5722;
+            background: white;
         }
 
         .persian-number {
@@ -517,7 +537,7 @@
         <span>👤 {{ user_name|default:"کاربر" }}</span>
         <div>
             {% if user_position == 1 %}
-                <a href="/import/" style="background: #FF5722;">📥 ورود اطلاعات</a>
+                <a href="/import/" style="background: #19A7CE; color: white;">📥 ورود اطلاعات</a>
             {% endif %}
             <a href="/change-password/">🔐 تغییر رمز</a>
             <a href="/logout/" onclick="return confirm('آیا از خروج از سیستم اطمینان دارید؟');">🚪 خروج</a>
@@ -634,15 +654,16 @@
                         <td>{{ perf.staff.unit.unit_name_fa|default:"-" }}</td>
                         <td class="persian-number">{{ perf.year.year_number|default:"-" }}</td>
                         <td>{{ perf.month.month_name|default:"-" }}</td>
-                        <td class="persian-number numeric" data-raw="{{ perf.performance_working_days|default:0 }}">{{ perf.performance_working_days|default:"0" }}</td>
-                        <td class="persian-number numeric duration" data-raw="{{ perf.performance_hourly_overtime|default:'0' }}">{{ perf.performance_hourly_overtime|default:"0" }}</td>
-                        <td class="persian-number numeric duration" data-raw="{{ perf.performance_hourly_leave|default:'0' }}">{{ perf.performance_hourly_leave|default:"0" }}</td>
-                        <td class="persian-number numeric duration" data-raw="{{ perf.performance_hourly_absence|default:'0' }}">{{ perf.performance_hourly_absence|default:"0" }}</td>
-                        <td class="persian-number numeric" data-raw="{{ perf.performance_daily_absence|default:0 }}">{{ perf.performance_daily_absence|default:"0" }}</td>
-                        <td class="persian-number numeric" data-raw="{{ perf.performance_annual_leave|default:0 }}">{{ perf.performance_annual_leave|default:"0" }}</td>
-                        <td class="persian-number numeric" data-raw="{{ perf.performance_sick_leave|default:0 }}">{{ perf.performance_sick_leave|default:"0" }}</td>
-                        <td class="persian-number numeric" data-raw="{{ perf.performance_daily_reward_leave|default:0 }}">{{ perf.performance_daily_reward_leave|default:"0" }}</td>
-                        <td class="persian-number numeric" data-raw="{{ perf.performance_daily_mission|default:0 }}">{{ perf.performance_daily_mission|default:"0" }}</td>
+                        <!-- Admin editable fields (11 columns) -->
+                        <td class="persian-number numeric admin-editable" data-field="performance_working_days" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_working_days|default:0 }}">{{ perf.performance_working_days|default:"0" }}</td>
+                        <td class="persian-number numeric duration admin-editable" data-field="performance_hourly_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_overtime|default:'0' }}">{{ perf.performance_hourly_overtime|default:"0" }}</td>
+                        <td class="persian-number numeric duration admin-editable" data-field="performance_hourly_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_leave|default:'0' }}">{{ perf.performance_hourly_leave|default:"0" }}</td>
+                        <td class="persian-number numeric duration admin-editable" data-field="performance_hourly_absence" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_hourly_absence|default:'0' }}">{{ perf.performance_hourly_absence|default:"0" }}</td>
+                        <td class="persian-number numeric admin-editable" data-field="performance_daily_absence" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_absence|default:0 }}">{{ perf.performance_daily_absence|default:"0" }}</td>
+                        <td class="persian-number numeric admin-editable" data-field="performance_annual_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_annual_leave|default:0 }}">{{ perf.performance_annual_leave|default:"0" }}</td>
+                        <td class="persian-number numeric admin-editable" data-field="performance_sick_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_sick_leave|default:0 }}">{{ perf.performance_sick_leave|default:"0" }}</td>
+                        <td class="persian-number numeric admin-editable" data-field="performance_daily_reward_leave" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_reward_leave|default:0 }}">{{ perf.performance_daily_reward_leave|default:"0" }}</td>
+                        <td class="persian-number numeric admin-editable" data-field="performance_daily_mission" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_daily_mission|default:0 }}">{{ perf.performance_daily_mission|default:"0" }}</td>
                         <!-- Proposed fields (Head of Unit editable - yellow) -->
                         <td class="persian-number numeric head-editable" data-field="performance_proposed_overtime" data-performance-id="{{ perf.performance_id }}" data-raw="{{ perf.performance_proposed_overtime|default:0 }}">
                             {{ perf.performance_proposed_overtime|default:"0" }}
@@ -666,7 +687,7 @@
                         <td colspan="18" style="text-align: center; padding: 50px;">
                             😊 هیچ رکورد عملکردی یافت نشد
                         </td>
-                    </tr>
+                    <tr>
                     {% endfor %}
                 </tbody>
                 <tfoot id="summaryRow"></tfoot>
@@ -771,11 +792,12 @@
         }
 
         // ============================================================
-        // DYNAMIC STAFF FILTER (Office Manager only)
+        // DYNAMIC STAFF FILTER (Admin and Office Manager)
         // ============================================================
         function filterStaffByUnit() {
             const userPosition = {{ user_position|default:0 }};
-            if (userPosition !== 2) return;
+            // Apply for Admin (1) and Office Manager (2)
+            if (userPosition !== 1 && userPosition !== 2) return;
 
             const selectedUnit = document.getElementById('unitFilter').value;
             const staffSelect = document.getElementById('staffFilter');
@@ -854,10 +876,10 @@
             });
 
             let summaryCells = [];
-            summaryCells.push('<td style="background: #303841;">📊 ' + (summaryType === 'sum' ? 'جمع کل' : 'میانگین') + '</td>');
-            summaryCells.push('<td style="background: #5a8a8d;">-</td>');
-            summaryCells.push('<td style="background: #5a8a8d;">-</td>');
-            summaryCells.push('<td style="background: #5a8a8d;">-</td>');
+            summaryCells.push('<td style="background: #146C94;">📊 ' + (summaryType === 'sum' ? 'جمع کل' : 'میانگین') + '</td>');
+            summaryCells.push('<td style="background: #AFD3E2;">-</td>');
+            summaryCells.push('<td style="background: #AFD3E2;">-</td>');
+            summaryCells.push('<td style="background: #AFD3E2;">-</td>');
 
             for (let col = 4; col <= 17; col++) {
                 const firstRow = dataRows[0];
@@ -873,7 +895,7 @@
                 }
             }
 
-            document.getElementById('summaryRow').innerHTML = `<tr class="summary-row">${summaryCells.join('')}</table>`;
+            document.getElementById('summaryRow').innerHTML = `<tr class="summary-row">${summaryCells.join('')}</tr>`;
 
             // Apply Persian numbers to summary row
             document.querySelectorAll('#summaryRow td').forEach(td => {
@@ -943,6 +965,53 @@
         function makeEditable() {
             const userPosition = {{ user_position|default:0 }};
 
+            // Admin (position_id=1) - Edit admin-editable fields (blue)
+            if (userPosition === 1) {
+                document.querySelectorAll('.admin-editable').forEach(cell => {
+                    cell.addEventListener('dblclick', function() {
+                        const currentValue = this.innerText;
+                        const currentRaw = this.getAttribute('data-raw');
+                        const performanceId = this.dataset.performanceId;
+                        const fieldName = this.dataset.field;
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = currentRaw !== '0' && currentRaw !== '-' ? toEnglishNumber(currentValue) : '';
+                        input.style.cssText = 'width:80px;padding:4px;border:2px solid #146C94;border-radius:8px;font-family:inherit;font-size:11px;text-align:center;';
+                        this.innerHTML = '';
+                        this.appendChild(input);
+                        input.focus();
+
+                        const saveValue = () => {
+                            let newValue = input.value.trim();
+                            if (newValue === '') newValue = null;
+                            fetch('/api/update-performance/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                                body: JSON.stringify({ performance_id: performanceId, field_name: fieldName, new_value: newValue })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    this.setAttribute('data-raw', newValue || '0');
+                                    this.innerText = toPersianNumber(newValue || '0');
+                                    showToast('✓ ذخیره شد', 'success');
+                                    calculateSummary();
+                                } else {
+                                    this.innerText = currentValue;
+                                    showToast('❌ خطا: ' + (data.error || 'مجوز ویرایش ندارید'), 'error');
+                                }
+                            })
+                            .catch(() => {
+                                this.innerText = currentValue;
+                                showToast('❌ خطا در ارتباط با سرور', 'error');
+                            });
+                        };
+                        input.addEventListener('blur', saveValue);
+                        input.addEventListener('keypress', e => { if (e.key === 'Enter') saveValue(); });
+                    });
+                });
+            }
+
             // Head of Unit (position_id=3) - Edit proposed fields (yellow)
             if (userPosition === 3) {
                 document.querySelectorAll('.head-editable').forEach(cell => {
@@ -954,7 +1023,7 @@
                         const input = document.createElement('input');
                         input.type = 'text';
                         input.value = currentRaw !== '0' ? toEnglishNumber(currentValue) : '';
-                        input.style.cssText = 'width:70px;padding:4px;border:2px solid #FF5722;border-radius:8px;font-family:inherit;font-size:11px;text-align:center;';
+                        input.style.cssText = 'width:70px;padding:4px;border:2px solid #19A7CE;border-radius:8px;font-family:inherit;font-size:11px;text-align:center;';
                         this.innerHTML = '';
                         this.appendChild(input);
                         input.focus();
@@ -1001,7 +1070,7 @@
                         const input = document.createElement('input');
                         input.type = 'text';
                         input.value = currentRaw !== '0' ? toEnglishNumber(currentValue) : '';
-                        input.style.cssText = 'width:80px;padding:4px;border:2px solid #4CAF50;border-radius:8px;font-family:inherit;font-size:11px;text-align:center;';
+                        input.style.cssText = 'width:80px;padding:4px;border:2px solid #19A7CE;border-radius:8px;font-family:inherit;font-size:11px;text-align:center;';
                         this.innerHTML = '';
                         this.appendChild(input);
                         input.focus();

@@ -26,4 +26,7 @@ urlpatterns = [
 
     # Import endpoint (placeholder - to be implemented)
     path('import/', views.import_performance_page, name='api_import'),
+    # Update performance endpoint (for inline editing)
+    path('update-performance/', views.update_performance_field, name='update_performance'),
+    path('debug-user/', views.debug_user, name='debug_user'),
 ]

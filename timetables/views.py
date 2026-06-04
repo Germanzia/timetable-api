@@ -204,7 +204,7 @@ def api_root(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def update_performance_field(request):
-    """AJAX endpoint for inline editing of performance fields."""
+    """AJAX endpoint for updating performance fields"""
 
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Not authenticated'}, status=401)
@@ -221,6 +221,17 @@ def update_performance_field(request):
 
     # Define allowed fields per role
     allowed_fields = {
+        1: [  # Admin
+            'performance_working_days',
+            'performance_hourly_overtime',
+            'performance_hourly_leave',
+            'performance_hourly_absence',
+            'performance_daily_absence',
+            'performance_annual_leave',
+            'performance_sick_leave',
+            'performance_daily_reward_leave',
+            'performance_daily_mission'
+        ],
         2: [  # Office Manager
             'performance_approved_hourly_leave',
             'performance_approved_overtime',
@@ -232,11 +243,18 @@ def update_performance_field(request):
         ]
     }
 
+    # Debug logging
+    print(f"User: {request.user.username}")
+    print(f"Position ID: {current_staff.position_id}")
+    print(f"Field name: {field_name}")
+    print(f"Allowed for position: {allowed_fields.get(current_staff.position_id, [])}")
+
     if current_staff.position_id not in allowed_fields:
-        return JsonResponse({'error': 'Permission denied'}, status=403)
+        return JsonResponse({'error': f'Permission denied. Your position ID is {current_staff.position_id}'},
+                            status=403)
 
     if field_name not in allowed_fields[current_staff.position_id]:
-        return JsonResponse({'error': 'You are not allowed to edit this field'}, status=403)
+        return JsonResponse({'error': f'You are not allowed to edit this field: {field_name}'}, status=403)
 
     try:
         performance = Performance.objects.get(performance_id=performance_id)
@@ -440,3 +458,37 @@ def import_performance_page(request):
         'user_name': user_name,
         'user_position': 1,
     })
+
+
+def debug_user(request):
+    """Debug endpoint to check user position"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Not authenticated'})
+
+    try:
+        staff = Staff.objects.get(user=request.user)
+        return JsonResponse({
+            'username': request.user.username,
+            'staff_id': staff.staff_id,
+            'position_id': staff.position_id,
+            'position_name': staff.position.position_name_eng if staff.position else 'None'
+        })
+    except Staff.DoesNotExist:
+        return JsonResponse({'error': 'Staff not found'})
+
+
+def debug_user(request):
+    """Debug endpoint to check user position"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Not authenticated'})
+
+    try:
+        staff = Staff.objects.get(user=request.user)
+        return JsonResponse({
+            'username': request.user.username,
+            'staff_id': staff.staff_id,
+            'position_id': staff.position_id,
+            'position_name': staff.position.position_name_eng if staff.position else 'None'
+        })
+    except Staff.DoesNotExist:
+        return JsonResponse({'error': 'Staff not found'})
